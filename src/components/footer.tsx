@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import ClientOnly from "./ClientOnly";
-import { useEffect, useState } from "react";
+import { useTranslation } from 'next-i18next';
 import { BACKEND_DOMAIN } from "@/api/config";
 
 interface SocialLinks {
@@ -15,9 +16,10 @@ interface SocialLinks {
 export default function Footer() {
   const [socialLinks, setSocialLinks] = useState<SocialLinks>({
     facebook: "https://facebook.com/saigon3jeans",
-    instagram: "https://instagram.com/saigon3jeans", 
+    instagram: "https://instagram.com/saigon3jeans",
     youtube: "https://youtube.com/@saigon3jeans"
   });
+  const { t, i18n } = useTranslation("footer");
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -34,117 +36,138 @@ export default function Footer() {
 
     fetchContactInfo();
   }, []);
+
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'vi' ? 'ja' : 'vi';
+    i18n.changeLanguage(newLanguage);
+  };
+
   return (
     <ClientOnly>
-    <footer className="nextstep-footer">
-      <div className="footer-main">
-        <div className="container">
-          <div className="row">
-            {/* Logo & Slogan */}
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="footer-brand">
-                <Image
-                  src="/images/LogoNexxtStepVN.png"
-                  alt="Next Step Viet Nam Logo"
-                  className="footer-logo mb-3"
-                  width={200}
-                  height={70}
-                />
-                <p className="footer-slogan">
-                  NEXT STEP VIET NAM<br />
-                  <span className="slogan-sub">Viết tiếp tương lai cùng bạn!</span>
-                </p>
-                <p className="footer-commitment">
-                  Chúng tôi cam kết kết nối doanh nghiệp Nhật và đồng hành kỹ sư sau khi qua Nhật làm việc.
-                </p>
-                <div className="footer-social">
-                  <Link href={socialLinks.facebook || "https://facebook.com"} target="_blank" rel="noopener noreferrer" className="social-link">
-                    <i className="fab fa-facebook-f"></i>
-                  </Link>
-                  <Link href={socialLinks.instagram || "https://instagram.com"} target="_blank" rel="noopener noreferrer" className="social-link">
-                    <i className="fab fa-instagram"></i>
-                  </Link>
-                  <Link href={socialLinks.youtube || "https://youtube.com"} target="_blank" rel="noopener noreferrer" className="social-link">
-                    <i className="fab fa-youtube"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Thông tin liên hệ */}
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="footer-section">
-                <h5 className="footer-title">THÔNG TIN LIÊN HỆ</h5>
-                <ul className="footer-contact-list">
-                  <li>
-                    <i className="fas fa-map-marker-alt"></i>
-                    <span>75B Đường Cách Mạng Tháng 8,<br />Phường Lái Thiêu, TP. HCM</span>
-                  </li>
-                  <li>
-                    <i className="fas fa-phone"></i>
-                    <a href="tel:0937548534">0937 548 534</a>
-                  </li>
-                  <li>
-                    <i className="fas fa-envelope"></i>
-                    <a href="mailto:info@nextstepviet.com">info@nextstepviet.com</a>
-                  </li>
-                  <li>
-                    <i className="fas fa-globe"></i>
-                    <a href="https://www.nextstepviet.com" target="_blank" rel="noopener noreferrer">www.nextstepviet.com</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="col-lg-4 col-md-12 mb-4">
-              <div className="row">
-                <div className="col-6">
-                  <div className="footer-section">
-                    <h5 className="footer-title">GIỚI THIỆU</h5>
-                    <ul className="footer-links">
-                      <li><Link href="/overview">Tổng quan</Link></li>
-                      <li><Link href="/vision">Tầm nhìn chiến lược</Link></li>
-                      <li><Link href="/mission">Sứ mệnh</Link></li>
-                    </ul>
+      <footer className="nextstep-footer">
+        <div className="footer-main">
+          <div className="container">
+            <div className="row">
+              {/* Logo & Slogan */}
+              <div className="col-lg-4 col-md-6 mb-4">
+                <div className="footer-brand">
+                  <Image
+                    src="/images/LogoNexxtStepVN.png"
+                    alt="Next Step Viet Nam Logo"
+                    className="footer-logo mb-3"
+                    width={200}
+                    height={70}
+                  />
+                  <p className="footer-slogan">
+                    NEXT STEP VIET NAM<br />
+                    <span className="slogan-sub">{t('slogan')}</span>
+                  </p>
+                  <p className="footer-commitment">{t('commitment')}</p>
+                  <div className="footer-social">
+                    <Link href={socialLinks.facebook || "https://facebook.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                      <i className="fab fa-facebook-f"></i>
+                    </Link>
+                    <Link href={socialLinks.instagram || "https://instagram.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                      <i className="fab fa-instagram"></i>
+                    </Link>
+                    <Link href={socialLinks.youtube || "https://youtube.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                      <i className="fab fa-youtube"></i>
+                    </Link>
                   </div>
+                  <button
+                    className="language-switcher mt-3"
+                    onClick={toggleLanguage}
+                    aria-label="Switch language"
+                    title={t('switch_language_title')}
+                  >
+                    <Image
+                      src={i18n.language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
+                      alt={t('flag_alt')}
+                      width={28}
+                      height={20}
+                      className="flag-icon"
+                    />
+                    <span className="language-text">
+                      {i18n.language === 'vi' ? 'VN' : 'JP'}
+                    </span>
+                  </button>
                 </div>
-                <div className="col-6">
-                  <div className="footer-section">
-                    <h5 className="footer-title">DỊCH VỤ</h5>
-                    <ul className="footer-links">
-                      <li><Link href="/for-engineers">Dành cho kỹ sư</Link></li>
-                      <li><Link href="/for-recruiters">Dành cho nhà tuyển dụng</Link></li>
-                      <li><Link href="/recruitment">Tuyển dụng</Link></li>
-                      <li><Link href="/news">Tin tức</Link></li>
-                      <li><Link href="/contact">Liên hệ</Link></li>
-                    </ul>
+              </div>
+
+              {/* Thông tin liên hệ */}
+              <div className="col-lg-4 col-md-6 mb-4">
+                <div className="footer-section">
+                  <h5 className="footer-title">{t('contact_info')}</h5>
+                  <ul className="footer-contact-list">
+                    <li>
+                      <i className="fas fa-map-marker-alt"></i>
+                      <span>{t('address')}</span>
+                    </li>
+                    <li>
+                      <i className="fas fa-phone"></i>
+                      <a href="tel:0937548534">{t('phone')}</a>
+                    </li>
+                    <li>
+                      <i className="fas fa-envelope"></i>
+                      <a href="mailto:info@nextstepviet.com">{t('email')}</a>
+                    </li>
+                    <li>
+                      <i className="fas fa-globe"></i>
+                      <a href="https://www.nextstepviet.com" target="_blank" rel="noopener noreferrer">{t('website')}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div className="col-lg-4 col-md-12 mb-4">
+                <div className="row">
+                  <div className="col-6">
+                    <div className="footer-section">
+                      <h5 className="footer-title">{t('introduction')}</h5>
+                      <ul className="footer-links">
+                        <li><Link href="/overview">{t('company_overview')}</Link></li>
+                        <li><Link href="/vision">{t('strategic_vision')}</Link></li>
+                        <li><Link href="/mission">{t('mission')}</Link></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="footer-section">
+                      <h5 className="footer-title">{t('services')}</h5>
+                      <ul className="footer-links">
+                        <li><Link href="/for-engineers">{t('for_engineers')}</Link></li>
+                        <li><Link href="/for-recruiters">{t('for_recruiters')}</Link></li>
+                        <li><Link href="/recruitment">{t('recruitment')}</Link></li>
+                        <li><Link href="/news">{t('news')}</Link></li>
+                        <li><Link href="/contact">{t('contact')}</Link></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer Bottom */}
-      <div className="footer-bottom">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-6 text-center text-md-start">
-              <p className="mb-0">© 2025 Next Step Viet Nam. All rights reserved.</p>
-            </div>
-            <div className="col-md-6 text-center text-md-end">
-              <p className="mb-0">
-                <Link href="/privacy-policy" className="footer-bottom-link">Chính sách bảo mật</Link>
-                <span className="mx-2">|</span>
-                <Link href="/terms" className="footer-bottom-link">Điều khoản sử dụng</Link>
-              </p>
+        {/* Footer Bottom */}
+        <div className="footer-bottom">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-md-6 text-center text-md-start">
+                <p className="mb-0">{t('copyright')}</p>
+              </div>
+              <div className="col-md-6 text-center text-md-end">
+                <p className="mb-0">
+                  <Link href="/privacy-policy" className="footer-bottom-link">{t('privacy_policy')}</Link>
+                  <span className="mx-2">|</span>
+                  <Link href="/terms" className="footer-bottom-link">{t('terms_of_use')}</Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
     </ClientOnly>
   );
 }
