@@ -686,10 +686,11 @@ header {
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  max-width: 1400px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  max-width: 1600px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .category-card {
@@ -814,10 +815,17 @@ header {
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    gap: 24px;
   }
 }
 
@@ -833,6 +841,7 @@ header {
   .categories-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+    padding: 0 15px;
   }
   
   .category-image-wrapper {
@@ -2336,6 +2345,51 @@ body.loaded .text-overlay {
   color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+}
+
+/* News Page Button - Red */
+.news-page .btn-outline-primary,
+.news-read-more-btn {
+  border: 2px solid #dc2626 !important;
+  color: #dc2626 !important;
+  background-color: transparent !important;
+}
+
+.news-page .btn-outline-primary:hover,
+.news-read-more-btn:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+/* News Page Card Border - Red */
+.news-page .card.shadow-sm {
+  border: 2px solid #dc2626 !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.news-page .card.shadow-sm:hover {
+  border-color: #991b1b !important;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25) !important;
+}
+
+/* Search Results Info */
+.search-results-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+}
+
+.search-results-info p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.search-results-info strong {
+  color: #dc2626;
 }
 
 /* Contact Section */
@@ -8902,17 +8956,17 @@ html body div#contactPage .contact-info-container .contact-item:nth-child(3) {
 .news-card-title {
   font-size: 22px;
   font-weight: 700;
-  color: #0d6efd;
+  color: #dc2626;
   margin-bottom: 8px;
   transition: color 0.2s;
 }
 .news-card-title-link {
-  color: #0d6efd;
+  color: #dc2626;
   text-decoration: none;
   transition: color 0.2s;
 }
 .news-card-title-link:hover {
-  color: #0d6efd;
+  color: #991b1b;
 }
 .featured-tag {
   position: absolute;

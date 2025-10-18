@@ -107,11 +107,7 @@ const menuGroups = [
   {
     title: "Content Management",
     items: [
-      { href: '/admin/products', label: 'Products', icon: <ProductIcon /> },
-      { href: '/admin/machinery', label: 'Machinery', icon: <MachineryIcon /> },
-      { href: '/admin/automation', label: 'Automation', icon: <AutomationIcon /> },
       { href: '/admin/facilities', label: 'Facilities', icon: <FacilitiesIcon /> },
-      { href: '/admin/eco-friendly', label: 'Eco-Friendly', icon: <EnvironmentIcon /> },
     ]
   },
   {

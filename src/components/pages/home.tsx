@@ -533,9 +533,9 @@ export default function Home({ homeData }: HomeProps) {
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">KỸ SƯ CƠ KHÍ</h3>
+                <h3 className="category-title">CƠ KHÍ</h3>
                 <p className="category-description">Thiết kế, phát triển và bảo trì hệ thống cơ khí</p>
-                <a href="/recruitment?category=co-khi" className="category-link">
+                <a href="/for-engineers?category=CƠ KHÍ" className="category-link">
                   Xem chi tiết <span className="arrow">→</span>
                 </a>
               </div>
@@ -552,28 +552,9 @@ export default function Home({ homeData }: HomeProps) {
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">KỸ SƯ Ô TÔ</h3>
+                <h3 className="category-title">Ô TÔ</h3>
                 <p className="category-description">Chuyên về công nghệ và hệ thống ô tô hiện đại</p>
-                <a href="/recruitment?category=o-to" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Kỹ sư IT */}
-            <div className="category-card">
-              <div className="category-image-wrapper">
-                <img 
-                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80" 
-                  alt="Kỹ sư IT"
-                  className="category-image"
-                />
-                <div className="category-overlay"></div>
-              </div>
-              <div className="category-content">
-                <h3 className="category-title">KỸ SƯ IT</h3>
-                <p className="category-description">Phát triển phần mềm và giải pháp công nghệ</p>
-                <a href="/recruitment?category=it" className="category-link">
+                <a href="/for-engineers?category=Ô TÔ" className="category-link">
                   Xem chi tiết <span className="arrow">→</span>
                 </a>
               </div>
@@ -590,9 +571,47 @@ export default function Home({ homeData }: HomeProps) {
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">KỸ SƯ ĐIỆN, ĐIỆN TỬ</h3>
+                <h3 className="category-title">ĐIỆN, ĐIỆN TỬ</h3>
                 <p className="category-description">Thiết kế và vận hành hệ thống điện công nghiệp</p>
-                <a href="/recruitment?category=dien-dien-tu" className="category-link">
+                <a href="/for-engineers?category=ĐIỆN, ĐIỆN TỬ" className="category-link">
+                  Xem chi tiết <span className="arrow">→</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Kỹ sư IT */}
+            <div className="category-card">
+              <div className="category-image-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80" 
+                  alt="Kỹ sư IT"
+                  className="category-image"
+                />
+                <div className="category-overlay"></div>
+              </div>
+              <div className="category-content">
+                <h3 className="category-title">IT</h3>
+                <p className="category-description">Phát triển phần mềm và giải pháp công nghệ</p>
+                <a href="/for-engineers?category=IT" className="category-link">
+                  Xem chi tiết <span className="arrow">→</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Kỹ sư Xây dựng */}
+            <div className="category-card">
+              <div className="category-image-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80" 
+                  alt="Kỹ sư Xây dựng"
+                  className="category-image"
+                />
+                <div className="category-overlay"></div>
+              </div>
+              <div className="category-content">
+                <h3 className="category-title">XÂY DỰNG</h3>
+                <p className="category-description">Thiết kế và quản lý các dự án xây dựng công nghiệp</p>
+                <a href="/for-engineers?category=XÂY DỰNG" className="category-link">
                   Xem chi tiết <span className="arrow">→</span>
                 </a>
               </div>

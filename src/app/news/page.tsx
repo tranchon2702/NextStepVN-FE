@@ -32,21 +32,30 @@ interface NewsData {
   pagination: Pagination;
 }
 
-async function getNewsData(page: number, limit: number): Promise<NewsData | null> {
+async function getNewsData(page: number, limit: number, search?: string): Promise<NewsData | null> {
   try {
-    const res = await fetch(`${BACKEND_DOMAIN}/api/home/news/all?page=${page}&limit=${limit}`, { cache: 'no-store' });
+    let url = `${BACKEND_DOMAIN}/api/home/news/all?page=${page}&limit=${limit}`;
+    if (search) {
+      url += `&search=${encodeURIComponent(search)}`;
+    }
+    console.log('📡 Fetching news from:', url);
+    const res = await fetch(url, { cache: 'no-store' });
     const data = await res.json();
+    console.log('📰 News data received:', data.data?.pagination);
     if (data.success) return data.data;
     return null;
-  } catch {
+  } catch (error) {
+    console.error('❌ Error fetching news:', error);
     return null;
   }
 }
 
-export default async function NewsPage({ searchParams }: { searchParams: { page?: string, limit?: string } }) {
-  const page = parseInt(searchParams.page || '1');
-  const limit = parseInt(searchParams.limit || '9');
-  const newsData = await getNewsData(page, limit);
+export default async function NewsPage({ searchParams }: { searchParams: Promise<{ page?: string, limit?: string, search?: string }> }) {
+  const params = await searchParams;
+  const page = parseInt(params.page || '1');
+  const limit = parseInt(params.limit || '9');
+  const search = params.search || '';
+  const newsData = await getNewsData(page, limit, search);
 
   if (!newsData || !newsData.news || newsData.news.length === 0) {
     return (
@@ -56,11 +65,22 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
         <main className="news-page">
           <div className="container py-5">
             <h1 className="news-page-title text-center mb-5">News</h1>
-            <div className="text-center py-5">
-              <i className="fas fa-newspaper fa-3x mb-3 text-muted"></i>
-              <h3>No news articles found</h3>
-              <p>Check back later for updates and announcements.</p>
-            </div>
+            {search ? (
+              <div className="text-center py-5">
+                <i className="fas fa-search fa-3x mb-3 text-muted"></i>
+                <h3>Không tìm thấy kết quả</h3>
+                <p>Không có tin tức nào khớp với từ khóa <strong>"{search}"</strong></p>
+                <Link href="/news" className="btn btn-outline-primary mt-3">
+                  <i className="fas fa-arrow-left me-2"></i>Xem tất cả tin tức
+                </Link>
+              </div>
+            ) : (
+              <div className="text-center py-5">
+                <i className="fas fa-newspaper fa-3x mb-3 text-muted"></i>
+                <h3>No news articles found</h3>
+                <p>Check back later for updates and announcements.</p>
+              </div>
+            )}
           </div>
         </main>
         <Footer />
@@ -79,7 +99,20 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
       <main className="news-page">
         <div className="container py-5">
           {/* Page Title */}
-          <h1 className="news-page-title text-center mb-5">News</h1>
+          <h1 className="news-page-title text-center mb-4">News</h1>
+          
+          {/* Search Results Info */}
+          {search && (
+            <div className="search-results-info mb-4 text-center">
+              <p className="mb-2">
+                Tìm thấy <strong>{newsData.pagination.totalItems}</strong> kết quả cho từ khóa: <strong>"{search}"</strong>
+              </p>
+              <Link href="/news" className="btn btn-sm btn-outline-secondary">
+                <i className="fas fa-times me-2"></i>Xóa tìm kiếm
+              </Link>
+            </div>
+          )}
+          
           {/* News Grid */}
           <div className="row g-4">
             {newsData.news.map((article: NewsArticle) => {
@@ -102,12 +135,30 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
                     {/* Card Image */}
                     <div className="card-img-top position-relative">
                       <Image
-                        src={article.image.startsWith('/images') ? article.image : `${BACKEND_DOMAIN}${article.image}`}
+                        src={(() => {
+                          // Ưu tiên mainImage trước, fallback sang image
+                          const imgPath = (article as any).mainImage || article.image;
+                          
+                          if (!imgPath || !imgPath.trim()) {
+                            return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop';
+                          }
+                          
+                          if (imgPath.startsWith('http')) {
+                            return imgPath;
+                          }
+                          
+                          if (imgPath.startsWith('/')) {
+                            return `${BACKEND_DOMAIN}${imgPath}`;
+                          }
+                          
+                          return `${BACKEND_DOMAIN}/${imgPath}`;
+                        })()}
                         alt={article.title}
                         width={400}
                         height={250}
                         className="img-fluid"
                         style={{ objectFit: 'cover', height: '200px', width: '100%' }}
+                        unoptimized
                       />
                       <div className="news-date-badge">
                         {formattedDate}
@@ -166,7 +217,7 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
                       {/* Read More Link */}
                       <Link 
                         href={`/news/${article.slug}`} 
-                        className="btn btn-outline-primary mt-auto"
+                        className="btn btn-outline-primary mt-auto news-read-more-btn"
                         style={{ fontWeight: 500 }}
                       >
                         Read More
@@ -185,7 +236,7 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
                 <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
                   <Link 
                     className="page-link" 
-                    href={`/news?page=${page - 1}&limit=${limit}`}
+                    href={`/news?page=${page - 1}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
                     aria-label="Previous"
                   >
                     <span aria-hidden="true">&laquo;</span>
@@ -200,7 +251,7 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
                     >
                       <Link 
                         className="page-link" 
-                        href={`/news?page=${pageNum}&limit=${limit}`}
+                        href={`/news?page=${pageNum}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
                       >
                         {pageNum}
                       </Link>
@@ -211,7 +262,7 @@ export default async function NewsPage({ searchParams }: { searchParams: { page?
                 <li className={`page-item ${page >= newsData.pagination.totalPages ? 'disabled' : ''}`}>
                   <Link 
                     className="page-link" 
-                    href={`/news?page=${page + 1}&limit=${limit}`}
+                    href={`/news?page=${page + 1}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
                     aria-label="Next"
                   >
                     <span aria-hidden="true">&raquo;</span>

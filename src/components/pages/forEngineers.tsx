@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const BACKEND_DOMAIN = process.env.NEXT_PUBLIC_BACKEND_DOMAIN || 'http://localhost:5001';
 
@@ -161,11 +162,26 @@ const mockJobs: { [key: string]: any[] } = {
 };
 
 export default function ForEngineers() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("CƠ KHÍ"); // Default to first category
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  
+  // Set initial category based on URL param or default to first
+  const initialCategory = categoryParam && jobCategories.some(cat => cat.id === categoryParam) 
+    ? categoryParam 
+    : "CƠ KHÍ";
+  
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [allJobs, setAllJobs] = useState<any[]>([]);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+
+  // Update selected category when URL param changes
+  useEffect(() => {
+    if (categoryParam && jobCategories.some(cat => cat.id === categoryParam)) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [categoryParam]);
 
   // Fetch all jobs on mount
   useEffect(() => {

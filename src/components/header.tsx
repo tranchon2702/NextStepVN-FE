@@ -36,9 +36,8 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log("Tìm kiếm:", searchQuery);
-      // TODO: Implement search logic here
-      // Có thể navigate đến trang tìm kiếm hoặc mở modal kết quả
+      // Navigate to news page with search query
+      window.location.href = `/news?search=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 

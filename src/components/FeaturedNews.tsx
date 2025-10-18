@@ -91,12 +91,30 @@ export default function FeaturedNews() {
                   <Link href={`/news/${article.slug}`} className="card-img-link">
                     <div className="card-img-top position-relative">
                       <Image
-                        src={article.image.startsWith('/images') ? article.image : `${BACKEND_DOMAIN}${article.image}`}
+                        src={(() => {
+                          // Ưu tiên mainImage trước, fallback sang image
+                          const imgPath = (article as any).mainImage || article.image;
+                          
+                          if (!imgPath || !imgPath.trim()) {
+                            return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop';
+                          }
+                          
+                          if (imgPath.startsWith('http')) {
+                            return imgPath;
+                          }
+                          
+                          if (imgPath.startsWith('/')) {
+                            return `${BACKEND_DOMAIN}${imgPath}`;
+                          }
+                          
+                          return `${BACKEND_DOMAIN}/${imgPath}`;
+                        })()}
                         alt={article.title}
                         width={400}
                         height={250}
                         className="img-fluid"
                         style={{ objectFit: 'cover', height: '200px', width: '100%' }}
+                        unoptimized
                       />
                       <div className="news-date-badge">
                         {formattedDate}
