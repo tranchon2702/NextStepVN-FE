@@ -185,12 +185,6 @@ export default function Contact({ contactInfo }: ContactProps) {
                   </div>
                   <div className="contact-item">
                     <div className="contact-icon small">
-                      <i className="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div className="contact-text">{data?.address2}</div>
-                  </div>
-                  <div className="contact-item">
-                    <div className="contact-icon small">
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="contact-text">{data?.email}</div>

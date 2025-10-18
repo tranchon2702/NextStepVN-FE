@@ -36,70 +36,111 @@ export default function Footer() {
   }, []);
   return (
     <ClientOnly>
-    <footer className="bg-white footer-mobile-responsive py-4">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-3 col-12 footer-mobile-logo">
-            <Image
-              src="/images/sg3jeans_logo.png"
-              alt="Saigon 3 Logo"
-              className="mb-3"
-              width={100}
-              height={100}
-              style={{ height: "50px", width: "auto" }}
-            />
-            <div className="social-icons footer-mobile-social">
-              <Link href={socialLinks.facebook || "https://facebook.com/saigon3jeans"} target="_blank" rel="noopener noreferrer" className="me-2">
-                <i className="fab fa-facebook-f"></i>
-              </Link>
-              <Link href={socialLinks.instagram || "https://instagram.com/saigon3jeans"} target="_blank" rel="noopener noreferrer" className="me-2">
-                <i className="fab fa-instagram"></i>
-              </Link>
-              <Link href={socialLinks.youtube || "https://youtube.com/@saigon3jeans"} target="_blank" rel="noopener noreferrer" className="me-2">
-                <i className="fab fa-youtube"></i>
-              </Link>
+    <footer className="nextstep-footer">
+      <div className="footer-main">
+        <div className="container">
+          <div className="row">
+            {/* Logo & Slogan */}
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="footer-brand">
+                <Image
+                  src="/images/LogoNexxtStepVN.png"
+                  alt="Next Step Viet Nam Logo"
+                  className="footer-logo mb-3"
+                  width={200}
+                  height={70}
+                />
+                <p className="footer-slogan">
+                  NEXT STEP VIET NAM<br />
+                  <span className="slogan-sub">Viết tiếp tương lai cùng bạn!</span>
+                </p>
+                <p className="footer-commitment">
+                  Chúng tôi cam kết kết nối doanh nghiệp Nhật và đồng hành kỹ sư sau khi qua Nhật làm việc.
+                </p>
+                <div className="footer-social">
+                  <Link href={socialLinks.facebook || "https://facebook.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                    <i className="fab fa-facebook-f"></i>
+                  </Link>
+                  <Link href={socialLinks.instagram || "https://instagram.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                    <i className="fab fa-instagram"></i>
+                  </Link>
+                  <Link href={socialLinks.youtube || "https://youtube.com"} target="_blank" rel="noopener noreferrer" className="social-link">
+                    <i className="fab fa-youtube"></i>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Thông tin liên hệ */}
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="footer-section">
+                <h5 className="footer-title">THÔNG TIN LIÊN HỆ</h5>
+                <ul className="footer-contact-list">
+                  <li>
+                    <i className="fas fa-map-marker-alt"></i>
+                    <span>75B Đường Cách Mạng Tháng 8,<br />Phường Lái Thiêu, TP. HCM</span>
+                  </li>
+                  <li>
+                    <i className="fas fa-phone"></i>
+                    <a href="tel:0937548534">0937 548 534</a>
+                  </li>
+                  <li>
+                    <i className="fas fa-envelope"></i>
+                    <a href="mailto:info@nextstepviet.com">info@nextstepviet.com</a>
+                  </li>
+                  <li>
+                    <i className="fas fa-globe"></i>
+                    <a href="https://www.nextstepviet.com" target="_blank" rel="noopener noreferrer">www.nextstepviet.com</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="col-lg-4 col-md-12 mb-4">
+              <div className="row">
+                <div className="col-6">
+                  <div className="footer-section">
+                    <h5 className="footer-title">GIỚI THIỆU</h5>
+                    <ul className="footer-links">
+                      <li><Link href="/overview">Tổng quan</Link></li>
+                      <li><Link href="/vision">Tầm nhìn chiến lược</Link></li>
+                      <li><Link href="/mission">Sứ mệnh</Link></li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-6">
+                  <div className="footer-section">
+                    <h5 className="footer-title">DỊCH VỤ</h5>
+                    <ul className="footer-links">
+                      <li><Link href="/for-engineers">Dành cho kỹ sư</Link></li>
+                      <li><Link href="/for-recruiters">Dành cho nhà tuyển dụng</Link></li>
+                      <li><Link href="/recruitment">Tuyển dụng</Link></li>
+                      <li><Link href="/news">Tin tức</Link></li>
+                      <li><Link href="/contact">Liên hệ</Link></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-md-3 col-12 footer-mobile-section">
-            <h5>WHO WE ARE</h5>
-            <ul className="list-unstyled">
-              <li>
-                <Link href="/overview">Overview</Link>
-              </li>
-              <li>
-                <Link href="/facilities">Facilities</Link>
-              </li>
-              <li>
-                <Link href="/recruitment">Careers</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="col-md-3 col-12 footer-mobile-section">
-            <h5>TECHNOLOGY</h5>
-            <ul className="list-unstyled">
-              <li>
-                <Link href="/machinery">Machinery</Link>
-              </li>
-              <li>
-                <Link href="/products">Production</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="col-md-3 col-12 footer-mobile-section">
-            <h5>SUSTAINABILITY</h5>
-            <ul className="list-unstyled">
-              <li>
-                <Link href="/eco-friendly">Eco-friendly infrastructure</Link>
-              </li>
-              <li>
-                <Link href="/automation">Automation</Link>
-              </li>
-            </ul>
-          </div>
         </div>
-        <div className="row mt-4">
-          <div className="col-12 footer-mobile-copyright text-center">
-            <p className="mb-0">© 2025 Saigon 3 Jean. All rights reserved.</p>
+      </div>
+
+      {/* Footer Bottom */}
+      <div className="footer-bottom">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-6 text-center text-md-start">
+              <p className="mb-0">© 2025 Next Step Viet Nam. All rights reserved.</p>
+            </div>
+            <div className="col-md-6 text-center text-md-end">
+              <p className="mb-0">
+                <Link href="/privacy-policy" className="footer-bottom-link">Chính sách bảo mật</Link>
+                <span className="mx-2">|</span>
+                <Link href="/terms" className="footer-bottom-link">Điều khoản sử dụng</Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>

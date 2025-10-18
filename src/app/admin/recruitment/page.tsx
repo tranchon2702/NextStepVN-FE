@@ -3,18 +3,30 @@ import { useEffect, useState } from 'react';
 import recruitmentService from '@/services/recruitmentService';
 import { FiPlus, FiEdit, FiTrash, FiEye, FiUsers, FiBriefcase, FiHome, FiPlusCircle, FiTrash2 } from 'react-icons/fi';
 import { BACKEND_DOMAIN } from '@/api/config';
+import JobFormModal from '@/components/admin/JobFormModal';
 
 interface Job {
   _id: string;
+  jobCode?: string;
   title: string;
-  type: string;
+  category: string;
+  type?: string;
+  workType?: string;
   location: string;
   description: string;
   requirements: string[];
   benefits: string[];
+  salary?: {
+    min?: number;
+    max?: number;
+    currency?: string;
+    note?: string;
+  };
+  recruitmentStatus?: string;
   isActive: boolean;
   createdAt: string;
   applicationCount?: number;
+  [key: string]: any;
 }
 
 interface Application {
@@ -74,16 +86,6 @@ export default function AdminRecruitmentPage() {
   // Modal state
   const [showJobModal, setShowJobModal] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
-  const [jobForm, setJobForm] = useState({
-    title: '',
-    type: 'Full-time',
-    location: '',
-    description: '',
-    requirements: [''],
-    benefits: [''],
-    isActive: true
-  });
-  const [jobFormError, setJobFormError] = useState('');
   
 
 
@@ -126,16 +128,6 @@ export default function AdminRecruitmentPage() {
   const handleCreateJob = () => {
     console.log('Open create job modal');
     setEditingJob(null);
-    setJobForm({
-      title: '',
-      type: 'Full-time',
-      location: '',
-      description: '',
-      requirements: [''],
-      benefits: [''],
-      isActive: true
-    });
-    setJobFormError('');
     setShowJobModal(true);
   };
 
@@ -143,38 +135,12 @@ export default function AdminRecruitmentPage() {
   const handleEditJob = (job: Job) => {
     console.log('Open edit job modal', job);
     setEditingJob(job);
-    setJobForm({
-      title: job.title,
-      type: job.type,
-      location: job.location,
-      description: job.description,
-      requirements: job.requirements.length > 0 ? job.requirements : [''],
-      benefits: job.benefits.length > 0 ? job.benefits : [''],
-      isActive: job.isActive
-    });
-    setJobFormError('');
     setShowJobModal(true);
   };
 
   // Lưu job (tạo mới hoặc cập nhật)
-  const handleSaveJob = async () => {
-    // Validate
-    if (!jobForm.title.trim() || !jobForm.location.trim() || !jobForm.description.trim() || !jobForm.requirements[0].trim()) {
-      setJobFormError('Vui lòng nhập đầy đủ các trường bắt buộc!');
-      return;
-    }
-    setJobFormError('');
+  const handleSaveJob = async (jobData: any) => {
     try {
-      // Đảm bảo requirements, benefits là mảng không có phần tử rỗng
-      const jobData = {
-        title: jobForm.title,
-        location: jobForm.location,
-        type: jobForm.type,
-        description: jobForm.description,
-        requirements: jobForm.requirements.filter(r => r && r.trim()),
-        benefits: jobForm.benefits.filter(b => b && b.trim()),
-        isActive: !!jobForm.isActive
-      };
       let data;
       if (editingJob) {
         data = await recruitmentService.updateJob(editingJob._id, jobData);
@@ -184,13 +150,13 @@ export default function AdminRecruitmentPage() {
       if (data.success) {
         setShowJobModal(false);
         fetchData();
-        alert(editingJob ? 'Cập nhật job thành công!' : 'Tạo job thành công!');
+        alert(editingJob ? 'Cập nhật tin tuyển dụng thành công!' : 'Tạo tin tuyển dụng thành công!');
       } else {
-        setJobFormError('Lỗi: ' + (data.message || 'Không xác định'));
+        throw new Error(data.message || 'Không xác định');
       }
     } catch (err) {
       const error = err as Error;
-      setJobFormError('Có lỗi xảy ra: ' + (error.message || 'Không xác định'));
+      throw new Error('Có lỗi xảy ra: ' + (error.message || 'Không xác định'));
     }
   };
 
@@ -281,164 +247,6 @@ export default function AdminRecruitmentPage() {
   }
 
   // Modal luôn render ở cuối return, ngoài mọi điều kiện tab
-  const renderJobModal = showJobModal && (
-    <div className="modal-overlay active" onClick={() => setShowJobModal(false)}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h3>{editingJob ? 'Chỉnh sửa vị trí' : 'Thêm vị trí mới'}</h3>
-          <button className="btn-close" onClick={()=>setShowJobModal(false)}>×</button>
-        </div>
-        <div className="modal-body">
-          <div className="form-group">
-            <label>Tiêu đề vị trí *</label>
-            <input 
-              className="form-input"
-              type="text" 
-              value={jobForm.title} 
-              onChange={(e) => setJobForm({...jobForm, title: e.target.value})}
-              placeholder="Nhập tiêu đề vị trí"
-              required
-            />
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Loại hình</label>
-              <select 
-                className="form-input"
-                value={jobForm.type} 
-                onChange={(e) => setJobForm({...jobForm, type: e.target.value})}
-              >
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
-                <option value="Internship">Internship</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Địa điểm *</label>
-              <input 
-                className="form-input"
-                type="text" 
-                value={jobForm.location} 
-                onChange={(e) => setJobForm({...jobForm, location: e.target.value})}
-                placeholder="Nhập địa điểm"
-                required
-              />
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Mô tả công việc *</label>
-            <textarea 
-              className="form-input"
-              value={jobForm.description} 
-              onChange={(e) => setJobForm({...jobForm, description: e.target.value})}
-              rows={4}
-              placeholder="Mô tả chi tiết công việc"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Yêu cầu *</label>
-            {jobForm.requirements.map((req, index) => (
-              <div className="feature-input-row" key={index}>
-                <input 
-                  className="form-input"
-                  type="text" 
-                  value={req} 
-                  onChange={(e) => {
-                    const newReqs = [...jobForm.requirements];
-                    newReqs[index] = e.target.value;
-                    setJobForm({...jobForm, requirements: newReqs});
-                  }}
-                  placeholder={`Yêu cầu ${index + 1}`}
-                  required
-                />
-                {jobForm.requirements.length > 1 && (
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      const newReqs = jobForm.requirements.filter((_, i) => i !== index);
-                      setJobForm({...jobForm, requirements: newReqs});
-                    }}
-                    className="btn-delete-feature"
-                    title="Xóa"
-                  >
-                    <FiTrash2 />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button 
-              type="button" 
-              onClick={() => setJobForm({
-                ...jobForm, 
-                requirements: [...jobForm.requirements, '']
-              })}
-              className="btn-add-feature"
-              style={{marginTop: 8}}
-            >
-              <FiPlusCircle style={{marginRight: 6}} /> Thêm yêu cầu
-            </button>
-          </div>
-          <div className="form-group">
-            <label>Phúc lợi</label>
-            {jobForm.benefits.map((benefit, index) => (
-              <div className="feature-input-row" key={index}>
-                <input 
-                  className="form-input"
-                  type="text" 
-                  value={benefit} 
-                  onChange={(e) => {
-                    const newBenefits = [...jobForm.benefits];
-                    newBenefits[index] = e.target.value;
-                    setJobForm({...jobForm, benefits: newBenefits});
-                  }}
-                  placeholder={`Phúc lợi ${index + 1}`}
-                />
-                {jobForm.benefits.length > 1 && (
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      const newBenefits = jobForm.benefits.filter((_, i) => i !== index);
-                      setJobForm({...jobForm, benefits: newBenefits});
-                    }}
-                    className="btn-delete-feature"
-                    title="Xóa"
-                  >
-                    <FiTrash2 />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button 
-              type="button" 
-              onClick={() => setJobForm({
-                ...jobForm, 
-                benefits: [...jobForm.benefits, '']
-              })}
-              className="btn-add-feature"
-              style={{marginTop: 8}}
-            >
-              <FiPlusCircle style={{marginRight: 6}} /> Thêm phúc lợi
-            </button>
-          </div>
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
-            <input type="checkbox" checked={jobForm.isActive} onChange={e => setJobForm({...jobForm, isActive: e.target.checked})} id="isActive" />
-            <label htmlFor="isActive" style={{ marginLeft: 8 }}>Đang tuyển dụng</label>
-          </div>
-          {jobFormError && (
-            <div className="alert alert-danger" style={{ marginBottom: 12 }}>
-              {jobFormError}
-            </div>
-          )}
-        </div>
-        <div className="modal-footer" style={{display: 'flex', justifyContent: 'flex-end', gap: 12}}>
-          <button onClick={() => setShowJobModal(false)} className="admin-btn" style={{borderRadius: 6, padding: '8px 18px'}}>Hủy</button>
-          <button onClick={handleSaveJob} className="admin-btn primary" style={{borderRadius: 6, padding: '8px 18px'}}>{editingJob ? 'Cập nhật' : 'Tạo mới'}</button>
-        </div>
-      </div>
-    </div>
-  );
 
     return (
     <div className="admin-page-container">
@@ -486,10 +294,12 @@ export default function AdminRecruitmentPage() {
                         <table className="admin-table">
                             <thead>
                                 <tr>
-                  <th>Vị trí</th>
-                  <th>Loại hình</th>
-                                    <th>Địa điểm</th>
-                                    <th>Trạng thái</th>
+                  <th>Mã CV</th>
+                  <th>Tên công việc</th>
+                  <th>Nhóm ngành</th>
+                  <th>Địa điểm</th>
+                  <th>Trạng thái tuyển dụng</th>
+                  <th>Hiển thị web</th>
                   <th>Ứng viên</th>
                   <th>Ngày tạo</th>
                   <th>Thao tác</th>
@@ -498,12 +308,27 @@ export default function AdminRecruitmentPage() {
                             <tbody>
                                 {jobs.map(job => (
                                     <tr key={job._id}>
+                                        <td><strong>{job.jobCode || '-'}</strong></td>
                                         <td>{job.title}</td>
-                    <td>{job.type}</td>
+                    <td>
+                      {job.category ? (
+                        <span className="category-badge">{job.category}</span>
+                      ) : (
+                        <span style={{ color: '#999', fontSize: '0.85rem' }}>Chưa phân loại</span>
+                      )}
+                    </td>
                                         <td>{job.location}</td>
                     <td>
+                      <span className={`status-badge ${
+                        job.recruitmentStatus === 'Đang tuyển' ? 'recruiting' : 
+                        job.recruitmentStatus === 'Ngưng tuyển' ? 'paused' : 'closed'
+                      }`}>
+                        {job.recruitmentStatus || 'Đang tuyển'}
+                      </span>
+                    </td>
+                    <td>
                       <span className={`status-badge ${job.isActive ? 'active' : 'inactive'}`}>
-                        {job.isActive ? 'Đang tuyển dụng' : 'Ngưng tuyển dụng'}
+                        {job.isActive ? 'Hiển thị' : 'Ẩn'}
                       </span>
                     </td>
                     <td>{job.applicationCount || 0}</td>
@@ -516,10 +341,10 @@ export default function AdminRecruitmentPage() {
                         <FiTrash />
                       </button>
                     </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
           </div>
         </div>
       )}
@@ -729,8 +554,6 @@ export default function AdminRecruitmentPage() {
         </div>
       )}
 
-      {renderJobModal}
-
       <style jsx>{`
         .admin-page-container {
           padding: 32px 0;
@@ -807,6 +630,9 @@ export default function AdminRecruitmentPage() {
         }
         .admin-table-container {
           overflow-x: auto;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         .admin-table {
           width: 100%;
@@ -817,13 +643,31 @@ export default function AdminRecruitmentPage() {
         .admin-table td {
           padding: 12px 8px;
           text-align: left;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid #f0f0f0;
         }
         .admin-table th {
-          background: #f8f9fa;
+          background: #fafafa;
           font-weight: 600;
           color: #333;
+          border-bottom: 2px solid #e5e5e5;
         }
+        .admin-table tbody tr:last-child td {
+          border-bottom: none;
+        }
+        .category-badge {
+          display: inline-block;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+          white-space: nowrap;
+          line-height: 1.2;
+        }
+
         .status-badge {
           padding: 4px 8px;
           border-radius: 12px;
@@ -835,6 +679,18 @@ export default function AdminRecruitmentPage() {
           color: #155724;
         }
         .status-badge.inactive {
+          background: #f8d7da;
+          color: #721c24;
+        }
+        .status-badge.recruiting {
+          background: #d1ecf1;
+          color: #0c5460;
+        }
+        .status-badge.paused {
+          background: #fff3cd;
+          color: #856404;
+        }
+        .status-badge.closed {
           background: #f8d7da;
           color: #721c24;
         }
@@ -1142,6 +998,14 @@ export default function AdminRecruitmentPage() {
           }
         }
       `}</style>
+
+      {/* Job Form Modal */}
+      <JobFormModal
+        show={showJobModal}
+        onClose={() => setShowJobModal(false)}
+        onSave={handleSaveJob}
+        editingJob={editingJob}
+      />
         </div>
     );
 }

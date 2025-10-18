@@ -9,6 +9,8 @@ import ClientOnly from "./ClientOnly";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<{[key: string]: boolean}>({});
+  const [language, setLanguage] = useState<'vi' | 'ja'>('vi');
+  const [searchQuery, setSearchQuery] = useState("");
   // const pathname = usePathname();
 
   const toggleMenu = () => {
@@ -25,6 +27,19 @@ export default function Header() {
       ...prev,
       [menuKey]: !prev[menuKey]
     }));
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'vi' ? 'ja' : 'vi');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log("Tìm kiếm:", searchQuery);
+      // TODO: Implement search logic here
+      // Có thể navigate đến trang tìm kiếm hoặc mở modal kết quả
+    }
   };
 
   // Close menu when clicking outside
@@ -65,82 +80,119 @@ export default function Header() {
         <nav className="navbar navbar-expand-lg navbar-light">
           <div className="container">
             <Link className="navbar-brand" href="/">
-              <Image
-                src="/images/sg3jeans_logo.png"
-                alt="Saigon 3 Logo"
-                className="logo"
-                width={100}
-                height={100}
-              />
+              <div className="brand-container">
+                <Image
+                  src="/images/LogoNexxtStepVN.png"
+                  alt="Next Step VN Logo"
+                  className="logo"
+                  width={180}
+                  height={60}
+                />
+                <div className="brand-slogan">
+                  <span className="brand-slogan-main">NEXT STEP VIET NAM</span>
+                  <span className="brand-slogan-sub">Viết tiếp tương lai cùng bạn!</span>
+                </div>
+              </div>
             </Link>
 
             {/* Desktop Menu */}
-            <div className="d-none d-lg-block">
+            <div className="d-none d-lg-flex align-items-center">
               <ul className="navbar-nav">
-                {/* WHO WE ARE Dropdown */}
+                {/* GIỚI THIỆU Dropdown */}
                 <li className="nav-item dropdown">
                   <span className="nav-link dropdown-toggle">
-                    WHO WE ARE
+                    {language === 'vi' ? 'GIỚI THIỆU' : '紹介'}
                   </span>
                   <ul className="dropdown-menu">
                     <li>
                       <Link className="dropdown-item" href="/overview">
-                        Overview
+                        {language === 'vi' ? 'Tổng quan về công ty' : '会社概要'}
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/facilities">
-                        Facilities
+                      <Link className="dropdown-item" href="/vision">
+                        {language === 'vi' ? 'Tầm nhìn chiến lược' : '戦略的ビジョン'}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" href="/mission">
+                        {language === 'vi' ? 'Sứ mệnh' : 'ミッション'}
                       </Link>
                     </li>
                   </ul>
                 </li>
 
-                {/* TECHNOLOGY Dropdown */}
+                {/* DỊCH VỤ CÔNG TY Dropdown */}
                 <li className="nav-item dropdown">
                   <span className="nav-link dropdown-toggle">
-                    TECHNOLOGY
+                    {language === 'vi' ? 'DỊCH VỤ CÔNG TY' : '会社サービス'}
                   </span>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" href="/machinery">
-                        Machinery
+                      <Link className="dropdown-item" href="/for-engineers">
+                        {language === 'vi' ? 'Dành cho kỹ sư tìm việc' : 'エンジニア向け求人'}
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/products">
-                        Products
+                      <Link className="dropdown-item" href="/for-recruiters">
+                        {language === 'vi' ? 'Dành cho nhà tuyển dụng' : '採用担当者向け'}
                       </Link>
                     </li>
                   </ul>
                 </li>
 
-                {/* SUSTAINABILITY Dropdown */}
-                <li className="nav-item dropdown">
-                  <span className="nav-link dropdown-toggle">
-                    SUSTAINABILITY
-                  </span>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link className="dropdown-item" href="/eco-friendly">
-                        Eco Friendly
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" href="/automation">
-                        Automation
-                      </Link>
-                    </li>
-                  </ul>
+                {/* TIN TỨC */}
+                <li className="nav-item">
+                  <Link className="nav-link" href="/news">
+                    {language === 'vi' ? 'TIN TỨC' : 'ニュース'}
+                  </Link>
                 </li>
 
-                {/* CONTACT */}
+                {/* LIÊN HỆ */}
                 <li className="nav-item">
                   <Link className="nav-link" href="/contact">
-                    CONTACT
+                    {language === 'vi' ? 'LIÊN HỆ' : 'お問い合わせ'}
                   </Link>
                 </li>
               </ul>
+
+              {/* Search Bar */}
+              <div className="header-search-container">
+                <form onSubmit={handleSearch} className="header-search-form">
+                  <input
+                    type="text"
+                    className="header-search-input"
+                    placeholder={language === 'vi' ? 'Tìm kiếm...' : '検索...'}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="header-search-btn"
+                  >
+                    <i className="fas fa-search"></i>
+                  </button>
+                </form>
+              </div>
+
+              {/* Language Switcher - Hiển thị ngôn ngữ hiện tại */}
+              <button
+                className="language-switcher"
+                onClick={toggleLanguage}
+                aria-label="Switch language"
+                title={language === 'vi' ? 'Chuyển sang tiếng Nhật' : '日本語に切り替える'}
+              >
+                <Image
+                  src={language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
+                  alt={language === 'vi' ? 'Vietnamese' : 'Japanese'}
+                  width={28}
+                  height={20}
+                  className="flag-icon"
+                />
+                <span className="language-text">
+                  {language === 'vi' ? 'VN' : 'JP'}
+                </span>
+              </button>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -178,89 +230,110 @@ export default function Header() {
           </button>
         </div>
         <ul className="mobile-menu-nav">
-          {/* WHO WE ARE with submenu */}
+          {/* Language Switcher Mobile */}
+          <li className="mobile-nav-item mobile-language-toggle">
+            <button 
+              className="mobile-nav-link language-switch-btn" 
+              onClick={toggleLanguage}
+            >
+              <Image
+                src={language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
+                alt="Flag"
+                width={24}
+                height={16}
+                className="flag-icon"
+              />
+              {language === 'vi' ? 'Tiếng Việt (VN)' : '日本語 (JP)'}
+            </button>
+          </li>
+
+          {/* Search Mobile */}
+          <li className="mobile-nav-item mobile-search">
+            <form onSubmit={handleSearch} className="mobile-search-form">
+              <input
+                type="text"
+                className="mobile-search-input"
+                placeholder={language === 'vi' ? 'Tìm kiếm...' : '検索...'}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button type="submit" className="mobile-search-btn">
+                <i className="fas fa-search"></i>
+              </button>
+            </form>
+          </li>
+
+          {/* GIỚI THIỆU with submenu */}
           <li className="mobile-nav-item has-submenu">
             <div 
               className="mobile-nav-link parent-link" 
-              onClick={() => toggleSubmenu('who-we-are')}
+              onClick={() => toggleSubmenu('introduction')}
             >
               <i className="fas fa-building"></i>
-              WHO WE ARE
-              <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['who-we-are'] ? 'expanded' : ''}`}></i>
+              {language === 'vi' ? 'GIỚI THIỆU' : '紹介'}
+              <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['introduction'] ? 'expanded' : ''}`}></i>
             </div>
-            <ul className={`mobile-submenu ${expandedMenus['who-we-are'] ? 'expanded' : ''}`}>
+            <ul className={`mobile-submenu ${expandedMenus['introduction'] ? 'expanded' : ''}`}>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/overview" onClick={closeMenu}>
                   <i className="fas fa-eye"></i>
-                  Overview
+                  {language === 'vi' ? 'Tổng quan về công ty' : '会社概要'}
                 </Link>
               </li>
               <li>
-                <Link className="mobile-nav-link submenu-item" href="/facilities" onClick={closeMenu}>
-                  <i className="fas fa-industry"></i>
-                  Facilities
+                <Link className="mobile-nav-link submenu-item" href="/vision" onClick={closeMenu}>
+                  <i className="fas fa-lightbulb"></i>
+                  {language === 'vi' ? 'Tầm nhìn chiến lược' : '戦略的ビジョン'}
+                </Link>
+              </li>
+              <li>
+                <Link className="mobile-nav-link submenu-item" href="/mission" onClick={closeMenu}>
+                  <i className="fas fa-bullseye"></i>
+                  {language === 'vi' ? 'Sứ mệnh' : 'ミッション'}
                 </Link>
               </li>
             </ul>
           </li>
 
-          {/* TECHNOLOGY with submenu */}
+          {/* DỊCH VỤ CÔNG TY with submenu */}
           <li className="mobile-nav-item has-submenu">
             <div 
               className="mobile-nav-link parent-link" 
-              onClick={() => toggleSubmenu('technology')}
+              onClick={() => toggleSubmenu('services')}
             >
-              <i className="fas fa-cogs"></i>
-              TECHNOLOGY
-              <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['technology'] ? 'expanded' : ''}`}></i>
+              <i className="fas fa-briefcase"></i>
+              {language === 'vi' ? 'DỊCH VỤ CÔNG TY' : '会社サービス'}
+              <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['services'] ? 'expanded' : ''}`}></i>
             </div>
-            <ul className={`mobile-submenu ${expandedMenus['technology'] ? 'expanded' : ''}`}>
+            <ul className={`mobile-submenu ${expandedMenus['services'] ? 'expanded' : ''}`}>
               <li>
-                <Link className="mobile-nav-link submenu-item" href="/machinery" onClick={closeMenu}>
-                  <i className="fas fa-tools"></i>
-                  Machinery
+                <Link className="mobile-nav-link submenu-item" href="/for-engineers" onClick={closeMenu}>
+                  <i className="fas fa-user-tie"></i>
+                  {language === 'vi' ? 'Dành cho kỹ sư tìm việc' : 'エンジニア向け求人'}
                 </Link>
               </li>
               <li>
-                <Link className="mobile-nav-link submenu-item" href="/products" onClick={closeMenu}>
-                  <i className="fas fa-box"></i>
-                  Products
+                <Link className="mobile-nav-link submenu-item" href="/for-recruiters" onClick={closeMenu}>
+                  <i className="fas fa-user-friends"></i>
+                  {language === 'vi' ? 'Dành cho nhà tuyển dụng' : '採用担当者向け'}
                 </Link>
               </li>
             </ul>
           </li>
 
-          {/* SUSTAINABILITY with submenu */}
-          <li className="mobile-nav-item has-submenu">
-            <div 
-              className="mobile-nav-link parent-link" 
-              onClick={() => toggleSubmenu('sustainability')}
-            >
-              <i className="fas fa-leaf"></i>
-              SUSTAINABILITY
-              <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['sustainability'] ? 'expanded' : ''}`}></i>
-            </div>
-            <ul className={`mobile-submenu ${expandedMenus['sustainability'] ? 'expanded' : ''}`}>
-              <li>
-                <Link className="mobile-nav-link submenu-item" href="/eco-friendly" onClick={closeMenu}>
-                  <i className="fas fa-seedling"></i>
-                  Eco Friendly
-                </Link>
-              </li>
-              <li>
-                <Link className="mobile-nav-link submenu-item" href="/automation" onClick={closeMenu}>
-                  <i className="fas fa-robot"></i>
-                  Automation
-                </Link>
-              </li>
-            </ul>
+          {/* TIN TỨC */}
+          <li className="mobile-nav-item">
+            <Link className="mobile-nav-link" href="/news" onClick={closeMenu}>
+              <i className="fas fa-newspaper"></i>
+              {language === 'vi' ? 'TIN TỨC' : 'ニュース'}
+            </Link>
           </li>
 
-          {/* CONTACT */}
+          {/* LIÊN HỆ */}
           <li className="mobile-nav-item">
             <Link className="mobile-nav-link" href="/contact" onClick={closeMenu}>
               <i className="fas fa-envelope"></i>
-              CONTACT
+              {language === 'vi' ? 'LIÊN HỆ' : 'お問い合わせ'}
             </Link>
           </li>
         </ul>

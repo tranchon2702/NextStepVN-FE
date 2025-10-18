@@ -75,8 +75,7 @@ interface HomeContactData {
 }
 
 interface HomeData {
-  hero: HeroData;  // Backward compatibility
-  heroes: HeroData[];  // New array of heroes for slider
+  hero: HeroData;
   sections: SectionData[];
   factoryVideo?: string;
   customers: {
@@ -135,16 +134,16 @@ function ResponsiveImg({ srcs, alt, className, width, height, sizes, style }: Re
       // Nếu có kích thước cụ thể, chọn ảnh phù hợp
       if (width && width <= 300) {
         // Ưu tiên thumbnail cho kích thước nhỏ
-        return srcs.thumbnail || srcs.medium || srcs.origin || srcs.webp;
+        return srcs.thumbnail || srcs.medium || srcs.low || srcs.webp || srcs.origin;
       } else if (width && width <= 800) {
         // Ưu tiên medium cho kích thước trung bình
-        return srcs.medium || srcs.origin || srcs.webp;
+        return srcs.medium || srcs.low || srcs.webp || srcs.origin;
       } else if (width && width <= 1200) {
-        // Ưu tiên origin trước để tránh lỗi 404
-        return srcs.origin || srcs.webp;
+        // Ưu tiên low cho kích thước lớn (nhưng không quá lớn)
+        return srcs.low || srcs.webp || srcs.origin;
       } else {
-        // Ưu tiên origin trước, webp sau
-        return srcs.origin || srcs.webp;
+        // Ưu tiên webp cho kích thước rất lớn
+        return srcs.webp || srcs.origin;
       }
     };
     
@@ -207,14 +206,6 @@ function ResponsiveImg({ srcs, alt, className, width, height, sizes, style }: Re
 
 export default function Home({ homeData }: HomeProps) {
   useClientScript();
-  
-  // Biến điều khiển hiển thị các sections
-  const SHOW_INFO_CARDS = false;
-  const SHOW_AI_SECTION = false;
-  const SHOW_FACTORY_VIDEO = false;
-  const SHOW_CUSTOMERS = false;
-  const SHOW_CERTIFICATIONS = false;
-  const SHOW_CONTACT_SECTION = false;
   
   // Sử dụng useState để lưu trữ dữ liệu
   const [data, setData] = useState<HomeData | null>(null);
@@ -289,14 +280,9 @@ export default function Home({ homeData }: HomeProps) {
     );
   }
 
-  const { hero, heroes, sections, factoryVideo, customers, certifications, featuredNews, regularNews } = data;
-  
-  // Sử dụng heroes array nếu có, nếu không fallback về hero đơn
-  const heroSlides = heroes && heroes.length > 0 ? heroes : (hero ? [hero] : []);
+  const { hero, sections, factoryVideo, customers, certifications, featuredNews, regularNews } = data;
   
   // Log để debug
-  console.log("Heroes data:", heroes);
-  console.log("Hero slides:", heroSlides);
   console.log("Factory Video URL:", factoryVideo);
   console.log("Hero Video URL:", hero?.videoUrl);
   
@@ -351,21 +337,6 @@ export default function Home({ homeData }: HomeProps) {
       console.error("Error processing video URL:", error);
       return "/videos/STORY_SG3J.mp4"; // Fallback về video mặc định
     }
-  };
-
-  // Hero slider settings
-  const heroSliderSettings = {
-    dots: true,
-    arrows: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    fade: true,
-    cssEase: 'ease-in-out',
   };
 
   // Function to get customer slider settings
@@ -440,169 +411,45 @@ export default function Home({ homeData }: HomeProps) {
 
   return (
     <ClientOnly>
-      {/* Hero Section - Slider */}
+      {/* Hero Section */}
       <section className="hero-section">
-        {heroSlides.length > 0 ? (
-          <Slider {...heroSliderSettings} className="hero-slider">
-            {heroSlides.map((heroItem, index) => (
-              <div key={index} className="hero-slide">
-                <div className="video-container">
-                  <ResponsiveImg
-                    srcs={getOptimizedImageUrls(heroItem?.backgroundImage || "/images/home_banner-section2.jpg")}
-                    alt={heroItem?.title || "Hero Banner"}
-                    className="img-fluid w-100"
-                    width={1920}
-                    height={1080}
-                  />
-                  <div className="overlay"></div>
-                </div>
-                {/* Text overlay - chỉ hiển thị subtitle */}
-                {heroItem?.subtitle && (
-                  <div className="text-overlay">
-                    <h1>{heroItem.subtitle}</h1>
-                  </div>
-                )}
-                {/* Button ở góc phải dưới - hiển thị title */}
-                {heroItem?.title && (
-                  <a 
-                    href={heroItem.buttonLink || '#'} 
-                    className="hero-cta-button"
-                    target={heroItem.buttonLink?.startsWith('http') ? '_blank' : '_self'}
-                    rel={heroItem.buttonLink?.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  >
-                    {heroItem.title}
-                    <span className="arrow">→</span>
-                  </a>
-                )}
-              </div>
-            ))}
-          </Slider>
-        ) : (
-          <div className="hero-slide">
-            <div className="video-container">
-              <ResponsiveImg
-                srcs={getOptimizedImageUrls("/images/home_banner-section2.jpg")}
-                alt="Hero Banner"
-                className="img-fluid w-100"
-                width={1920}
-                height={1080}
-              />
-              <div className="overlay"></div>
-            </div>
-            <div className="text-overlay">
-              <h1>WELCOME TO NEXT STEP VIET NAM</h1>
-            </div>
-          </div>
-        )}
+        <div className="video-container">
+          {hero?.videoUrl ? (
+            <video 
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-100 h-100 object-fit-cover"
+            >
+              <source src={getVideoUrl(hero.videoUrl)} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            // fallback giữ nguyên
+            <ResponsiveImg
+              srcs={getOptimizedImageUrls(hero?.backgroundImage || "/images/home_banner-section2.jpg")}
+              alt="Factory Aerial View"
+              className="img-fluid w-100"
+              width={1920}
+              height={1080}
+            />
+          )}
+          <div className="overlay"></div>
+        </div>
+        <div className="text-overlay">
+          <h1>{hero?.title || "WELCOME TO SAIGON 3 JEAN"}</h1>
+          {hero?.subtitle && (
+            <p className="hero-subtitle mt-3">{hero.subtitle}</p>
+          )}
+        </div>
         <div className="scroll-indicator">
           <div className="mouse"></div>
           <div className="arrow-down"></div>
         </div>
       </section>
-
-      {/* Thế mạnh NextStep Section - Pulsing CTA */}
-      <section className="strengths-cta-section">
-        <div className="container">
-          <div className="strengths-cta-wrapper">
-            <a href="/overview" className="strengths-cta-button">
-              <span className="cta-icon">⚡</span>
-              <span className="cta-text">THẾ MẠNH CỦA NEXT STEP VIỆT NAM</span>
-              <span className="cta-arrow">→</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Recruitment Categories Section */}
-      <section className="recruitment-categories-section">
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">THÔNG TIN TUYỂN DỤNG</h2>
-            <p className="section-subtitle">Cơ hội nghề nghiệp dành cho bạn</p>
-          </div>
-          
-          <div className="categories-grid">
-            {/* Kỹ sư Cơ khí */}
-            <div className="category-card">
-              <div className="category-image-wrapper">
-                <img 
-                  src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80" 
-                  alt="Kỹ sư Cơ khí"
-                  className="category-image"
-                />
-                <div className="category-overlay"></div>
-              </div>
-              <div className="category-content">
-                <h3 className="category-title">KỸ SƯ CƠ KHÍ</h3>
-                <p className="category-description">Thiết kế, phát triển và bảo trì hệ thống cơ khí</p>
-                <a href="/recruitment?category=co-khi" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Kỹ sư Ô tô */}
-            <div className="category-card">
-              <div className="category-image-wrapper">
-                <img 
-                  src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" 
-                  alt="Kỹ sư Ô tô"
-                  className="category-image"
-                />
-                <div className="category-overlay"></div>
-              </div>
-              <div className="category-content">
-                <h3 className="category-title">KỸ SƯ Ô TÔ</h3>
-                <p className="category-description">Chuyên về công nghệ và hệ thống ô tô hiện đại</p>
-                <a href="/recruitment?category=o-to" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Kỹ sư IT */}
-            <div className="category-card">
-              <div className="category-image-wrapper">
-                <img 
-                  src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80" 
-                  alt="Kỹ sư IT"
-                  className="category-image"
-                />
-                <div className="category-overlay"></div>
-              </div>
-              <div className="category-content">
-                <h3 className="category-title">KỸ SƯ IT</h3>
-                <p className="category-description">Phát triển phần mềm và giải pháp công nghệ</p>
-                <a href="/recruitment?category=it" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Kỹ sư Điện, Điện tử */}
-            <div className="category-card">
-              <div className="category-image-wrapper">
-                <img 
-                  src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80" 
-                  alt="Kỹ sư Điện, Điện tử"
-                  className="category-image"
-                />
-                <div className="category-overlay"></div>
-              </div>
-              <div className="category-content">
-                <h3 className="category-title">KỸ SƯ ĐIỆN, ĐIỆN TỬ</h3>
-                <p className="category-description">Thiết kế và vận hành hệ thống điện công nghiệp</p>
-                <a href="/recruitment?category=dien-dien-tu" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
       {/* Info Cards Section */}
-      {SHOW_INFO_CARDS && <section className="info-cards py-5">
+      {/* <section className="info-cards py-5">
         <div className="container">
           <div className="row">
             {sections &&
@@ -764,10 +611,9 @@ export default function Home({ homeData }: HomeProps) {
               ))}
           </div>
         </div>
-      </section>}
-      
+      </section> */}
       {/* AI Integration Section */}
-      {SHOW_AI_SECTION && <section className="ai-integration">
+      {/* <section className="ai-integration">
         <div className="container-fluid p-0">
           <div className="row g-0">
             <div className="col-12 position-relative ai-integration-banner">
@@ -806,10 +652,9 @@ export default function Home({ homeData }: HomeProps) {
             </div>
           </div>
         </div>
-      </section>}
-      
-      {/* Factory View Section */}
-      {SHOW_FACTORY_VIDEO && <section className="factory-view mb-4">
+      </section> */}
+      {/* Divider Line Section */}
+      {/* <section className="divider-section pb-4">
         <div className="container">
           <hr
             className="divider"
@@ -819,6 +664,9 @@ export default function Home({ homeData }: HomeProps) {
             }}
           />
         </div>
+      </section> */}
+      {/* Factory View Section */}
+      {/* <section className="factory-view mb-4">
         <div className="container-fluid p-0">
           {factoryVideo && isYouTubeUrl(factoryVideo) ? (
             <div className="position-relative" style={{ paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
@@ -883,10 +731,9 @@ export default function Home({ homeData }: HomeProps) {
             </div>
           )}
         </div>
-      </section>}
-      
+      </section> */}
       {/* Our Customers Section */}
-      {SHOW_CUSTOMERS && <section className="customers py-5">
+      {/* <section className="customers py-5">
         <div className="container-fluid">
           <div className="customers-wrapper position-relative">
             
@@ -983,10 +830,9 @@ export default function Home({ homeData }: HomeProps) {
             </div>
           </div>
         </div>
-      </section>}
-      
+      </section> */}
       {/* Certification Section */}
-      {SHOW_CERTIFICATIONS && <section className="certification py-5">
+      {/* <section className="certification py-5">
         <div className="container">
           <h2 className="section-title text-center mb-5">CERTIFICATION</h2>
           <div className="row">
@@ -1096,7 +942,7 @@ export default function Home({ homeData }: HomeProps) {
             </div>
           </div>
         </div>
-      </section>}
+      </section> */}
 
       {/* News Section */}
       <section className="news py-5">
@@ -1288,16 +1134,15 @@ export default function Home({ homeData }: HomeProps) {
             box-shadow: none !important;
           }
           .news-list-item {
-            background: #ffffff;
+            background: #f7f9fa;
             border-radius: 12px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
             transition: box-shadow 0.2s, background 0.2s;
-            border-bottom: 2px solid #ffe0e0;
+            border-bottom: 2px solid #e3eaf2;
           }
           .news-list-item:hover {
-            background: #fff5f5 !important;
-            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.15);
-            border-left: 3px solid #dc3545 !important;
+            background: linear-gradient(90deg, #e6f0fa 0%, #eaf6fd 100%);
+            box-shadow: 0 4px 16px rgba(13, 110, 253, 0.10);
           }
           .watch-video-btn {
             margin-top: 16px; padding: 10px 24px; border-radius: 24px; border: none; background: #174c7c; color: #fff; font-weight: 600; font-size: 18px; cursor: pointer;
@@ -1306,160 +1151,9 @@ export default function Home({ homeData }: HomeProps) {
           .watch-video-btn:hover { background: #0d2c4a; }
         `}</style>
       </section>
-
-      {/* Testimonials Section - Khách hàng nói gì về chúng tôi */}
-      <section className="testimonials-section">
-        <div className="container">
-          <div className="section-header">
-            <h2 className="section-title">KHÁCH HÀNG NÓI GÌ VỀ CHÚNG TÔI</h2>
-            <p className="section-subtitle">Những phản hồi tích cực từ khách hàng đã tin tưởng chúng tôi</p>
-          </div>
-
-          <div className="testimonials-wrapper">
-            <Slider {...{
-              dots: true,
-              infinite: true,
-              speed: 600,
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              autoplay: true,
-              autoplaySpeed: 5000,
-              pauseOnHover: true,
-              responsive: [
-                {
-                  breakpoint: 1024,
-                  settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                  }
-                },
-                {
-                  breakpoint: 768,
-                  settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                  }
-                }
-              ]
-            }} className="testimonials-slider">
-              {/* Testimonial 1 */}
-              <div className="testimonial-slide">
-                <div className="testimonial-card">
-                  <div className="quote-icon">
-                    <i className="fas fa-quote-left"></i>
-                  </div>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="testimonial-text">
-                    Chương trình học rất hợp lý và bài bản. Các giảng viên nhiệt tình, tận tâm. Sau khi hoàn thành khóa học, tôi đã tìm được việc làm phù hợp tại Nhật Bản.
-                  </p>
-                  <div className="testimonial-author">
-                    <div className="author-avatar">
-                      <img src="https://ui-avatars.com/api/?name=Nguyen+Thi+Lan&background=1e4f7a&color=fff&size=80" alt="Nguyễn Thị Lan" />
-                    </div>
-                    <div className="author-info">
-                      <h4 className="author-name">Nguyễn Thị Lan</h4>
-                      <p className="author-position">Kỹ sư Cơ khí</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 2 */}
-              <div className="testimonial-slide">
-                <div className="testimonial-card">
-                  <div className="quote-icon">
-                    <i className="fas fa-quote-left"></i>
-                  </div>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="testimonial-text">
-                    Mình đã được khách hàng vô tư khách hàng đã tìm được nhân tài phù hợp cho dự án của công ty. Dịch vụ chuyên nghiệp, hỗ trợ tận tình từ đầu đến cuối.
-                  </p>
-                  <div className="testimonial-author">
-                    <div className="author-avatar">
-                      <img src="https://ui-avatars.com/api/?name=Le+Thi+Huong&background=dc3545&color=fff&size=80" alt="Lê Thị Hương" />
-                    </div>
-                    <div className="author-info">
-                      <h4 className="author-name">Lê Thị Hương</h4>
-                      <p className="author-position">HR Manager</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 3 */}
-              <div className="testimonial-slide">
-                <div className="testimonial-card">
-                  <div className="quote-icon">
-                    <i className="fas fa-quote-left"></i>
-                  </div>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="testimonial-text">
-                    Chương trình đào tạo kỹ sư đi Nhật chi phí 0 đồng rất tốt. Tôi đã được học nhiều kỹ năng mới và có cơ hội làm việc tại môi trường quốc tế.
-                  </p>
-                  <div className="testimonial-author">
-                    <div className="author-avatar">
-                      <img src="https://ui-avatars.com/api/?name=Tran+Van+Nam&background=1e4f7a&color=fff&size=80" alt="Trần Văn Nam" />
-                    </div>
-                    <div className="author-info">
-                      <h4 className="author-name">Trần Văn Nam</h4>
-                      <p className="author-position">Kỹ sư IT</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 4 */}
-              <div className="testimonial-slide">
-                <div className="testimonial-card">
-                  <div className="quote-icon">
-                    <i className="fas fa-quote-left"></i>
-                  </div>
-                  <div className="stars">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="testimonial-text">
-                    Dịch vụ tuyển dụng rất chuyên nghiệp. Chúng tôi đã tìm được nhiều ứng viên chất lượng cao cho các vị trí kỹ sư tại công ty.
-                  </p>
-                  <div className="testimonial-author">
-                    <div className="author-avatar">
-                      <img src="https://ui-avatars.com/api/?name=Pham+Minh+Tuan&background=dc3545&color=fff&size=80" alt="Phạm Minh Tuấn" />
-                    </div>
-                    <div className="author-info">
-                      <h4 className="author-name">Phạm Minh Tuấn</h4>
-                      <p className="author-position">CEO - Tech Company</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Slider>
-          </div>
-        </div>
-      </section>
       
       {/* Contact Section - Dynamic (can be updated from dashboard) */}
-      {SHOW_CONTACT_SECTION && <section className="contact-section py-5">
+      {/* <section className="contact-section py-5">
         <div className="container">
           <div className="row">
             <div className="col-md-4 mb-4">
@@ -1486,7 +1180,7 @@ export default function Home({ homeData }: HomeProps) {
             </div>
           </div>
         </div>
-      </section>}
+      </section> */}
     </ClientOnly>
   );
 }

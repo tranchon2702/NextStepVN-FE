@@ -63,6 +63,7 @@ class HomeService {
       // Sử dụng dữ liệu trực tiếp từ API
       return {
         hero: data.hero || this.getDefaultHeroData(),
+        heroes: data.heroes || (data.hero ? [data.hero] : []), // Support multiple heroes
         sections: sectionsData || [],
         factoryVideo: data.factoryVideo || factoryVideo || "",
         customers: data.customers || this.getDefaultCustomersData(),
@@ -376,6 +377,47 @@ class HomeService {
       headers: getAuthHeaders(true),
       body: formData,
     });
+    return response.json();
+  }
+
+  /**
+   * Cập nhật multiple heroes (banners)
+   * @param {Array} heroesData - Array of hero data
+   * @param {Object} files - Object chứa các file (key: hero-${index})
+   * @returns {Promise<Object>} Kết quả cập nhật
+   */
+  async updateHeroes(heroesData, files = {}) {
+    const formData = new FormData();
+    
+    // Send heroes data as JSON
+    formData.append('heroes', JSON.stringify(heroesData));
+    
+    // Append files for each hero
+    Object.keys(files).forEach(key => {
+      if (files[key]) {
+        // key format: hero-${index}
+        const match = key.match(/hero-(\d+)/);
+        if (match) {
+          const index = match[1];
+          formData.append(`heroImage-${index}`, files[key]); // Changed from heroVideo to heroImage
+        }
+      }
+    });
+    
+    console.log('Updating heroes with data:', heroesData);
+    console.log('Files:', Object.keys(files));
+    
+    const response = await fetch(`${BACKEND_DOMAIN}/api/home/heroes`, {
+      method: 'PUT',
+      headers: getAuthHeaders(true),
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update heroes: ${response.status} ${errorText}`);
+    }
+    
     return response.json();
   }
 

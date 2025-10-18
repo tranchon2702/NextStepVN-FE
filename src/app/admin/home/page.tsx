@@ -24,13 +24,16 @@ interface ApiResponse {
   data: any;
 }
 interface HeroData {
-  title: string;
-  subtitle: string;
+  _id?: string;
+  title: string; // Button text ở góc phải dưới
+  subtitle: string; // Text giữa màn hình (optional)
   backgroundImage: string;
   videoUrl: string;
   isActive: boolean;
   aiBannerImage?: string;
   aiBannerTitle?: string;
+  order: number;
+  buttonLink?: string; // Link khi click button
 }
 interface SectionData {
   title: string;
@@ -104,7 +107,8 @@ interface CertificationData {
 }
 
 interface HomeData {
-  hero: HeroData;
+  hero: HeroData;  // Backward compatibility
+  heroes: HeroData[];  // New array for multiple heroes
   sections: SectionData[];
   factoryVideo?: string;
   customers: CustomersData;
@@ -541,8 +545,19 @@ export default function AdminHomePage() {
       
       // Đảm bảo dữ liệu có cấu trúc đúng
       // Đảm bảo dữ liệu có cấu trúc đúng và có dữ liệu mặc định cho homeContact
+      // Normalize heroes data để đảm bảo buttonLink luôn là string
+      const rawHeroes = Array.isArray((homeDataResult as any).heroes) ? (homeDataResult as any).heroes : ((homeDataResult as any).hero ? [(homeDataResult as any).hero] : []);
+      const normalizedHeroes = rawHeroes.map((hero: any) => ({
+        ...hero,
+        buttonLink: hero.buttonLink || "",
+        subtitle: hero.subtitle || "",
+        title: hero.title || ""
+      }));
+      
       const processedHomeData = {
         ...homeDataResult,
+        heroes: normalizedHeroes,
+        hero: (homeDataResult as any).hero || ((homeDataResult as any).heroes && (homeDataResult as any).heroes[0]) || null,
         sections: Array.isArray((homeDataResult as any).sections) ? (homeDataResult as any).sections : [],
         factoryVideo: (homeDataResult as any).factoryVideo || "",
         homeContact: (homeDataResult as any).homeContact || {
@@ -577,6 +592,14 @@ export default function AdminHomePage() {
 
   const hasChanges = (section: keyof Omit<HomeData, 'featuredNews'> | 'factoryVideo' | 'certifications') => {
     if (!initialHomeData || !homeData) return false;
+    if (section === 'heroes') {
+      // So sánh dữ liệu text
+      const textChanged = JSON.stringify(initialHomeData.heroes) !== JSON.stringify(homeData.heroes);
+      // So sánh file mới
+      const fileChanged = Object.keys(files).some(key => key.startsWith('hero-'));
+      console.log('hasChanges heroes:', { textChanged, fileChanged, initialHeroes: initialHomeData.heroes, currentHeroes: homeData.heroes });
+      return textChanged || fileChanged;
+    }
     if (section === 'hero') {
       // So sánh dữ liệu text
       const textChanged = JSON.stringify(initialHomeData.hero) !== JSON.stringify(homeData.hero);
@@ -889,7 +912,7 @@ export default function AdminHomePage() {
     }));
   };
 
-  const handleSave = async (section: "hero" | "sections" | "customers" | "factoryVideo" | "homeContact" | "certifications") => {
+  const handleSave = async (section: "hero" | "heroes" | "sections" | "customers" | "factoryVideo" | "homeContact" | "certifications") => {
     if (!homeData || !hasChanges(section)) return;
     setSaving(section);
 
@@ -898,7 +921,16 @@ export default function AdminHomePage() {
         const dataToSave = section === 'factoryVideo' ? { factoryVideo: homeData.factoryVideo } : homeData[section];
         // Chỉ gửi file (không gửi base64)
         const filesToSave: Record<string, File> = {};
-        if (section === 'hero') {
+        
+        if (section === 'heroes') {
+          // Handle múltiple heroes - collect all files for all heroes
+          homeData.heroes.forEach((hero, index) => {
+            if (files[`hero-${index}`]) {
+              filesToSave[`hero-${index}`] = files[`hero-${index}`];
+            }
+          });
+          result = await homeService.updateHeroes(homeData.heroes, filesToSave);
+        } else if (section === 'hero') {
           // Đảm bảo truyền đúng key cho AI Banner
           if (files['hero-aiBannerImage']) {
             filesToSave['aiBannerImage'] = files['hero-aiBannerImage'];
@@ -926,6 +958,9 @@ export default function AdminHomePage() {
         })));
         
         switch(section) {
+          case 'heroes':
+              // Đã xử lý ở trên (dòng 907-914)
+              break;
           case 'hero':
               result = await homeService.updateHero(dataToSave as HeroData, filesToSave);
               break;
@@ -1305,69 +1340,193 @@ export default function AdminHomePage() {
         <p className="admin-page-description">Chỉnh sửa nội dung sẽ được hiển thị trên trang chủ của website.</p>
       </div>
       
-      {/* Hero Section */}
-      <AdminSectionCard title="Hero Section" onSave={() => handleSave('hero')} isSaving={saving === 'hero'} hasChanges={hasChanges('hero')}>
-        <div className="grid-2-col">
-            <div className="form-column">
-                <FormItem label="Tiêu Hero Banner" icon={<FiType />}>
-                    <input type="text" value={homeData.hero.title || ''} name="title" onChange={(e) => handleInputChange(e, 'hero')} className="form-input" />
-                </FormItem>
-                 <FormItem label="Tiêu đề AI Banner" icon={<FiType />}>
-                    <input
-                      type="text"
-                      value={homeData?.hero?.aiBannerTitle || ''}
-                      onChange={e => setHomeData(prev => prev ? ({
-                        ...prev,
-                        hero: {
-                          ...prev.hero,
-                          aiBannerTitle: e.target.value
-                        }
-                      }) : prev)}
-                      placeholder="Nhập tiêu đề AI Banner"
-                      className="form-control"
-                    />
-                </FormItem>
-                 <FormItem label="Video URL" icon={<FiLink />}>
-                    <input type="text" placeholder="Dán link Youtube vào đây" value={homeData.hero.videoUrl || ''} name="videoUrl" onChange={(e) => handleInputChange(e, 'hero')} className="form-input" />
-                </FormItem>
-                 <FormItem label="Hoặc Upload video mới" icon={<FiVideo />}>
-                     <input type="file" onChange={handleVideoUpload} accept="video/*" className="form-file-input"/>
-                 </FormItem>
-            </div>
-            <div className="form-column">
-                <FormItem label="Video Hero Banner" icon={<FiVideo />}>
-                    <div className="image-preview-container">
-                      {homeData.hero.videoUrl ? (
-                        <video 
-                          src={`${BACKEND_DOMAIN}${homeData.hero.videoUrl}`} 
-                          width="300" 
-                          height="150" 
-                          controls 
-                          className="image-preview" 
-                        />
-                      ) : (
-                        <div className="no-video-placeholder">No hero video uploaded yet</div>
-                      )}
-                    </div>
-                    {/* BỎ input chọn file ảnh nền */}
-                </FormItem>
-                <FormItem label="Ảnh AI Banner" icon={<FiImage />}>
-                  <div className="image-preview-container">
-                    {heroPreview['hero-aiBannerImage']
-                      ? <Image src={heroPreview['hero-aiBannerImage']} alt="AI Banner" width={300} height={150} className="image-preview" />
-                      : (files['hero-aiBannerImage']
-                        ? <Image src={URL.createObjectURL(files['hero-aiBannerImage'])} alt="AI Banner" width={300} height={150} className="image-preview" />
-                        : (homeData.hero.aiBannerImage
-                          ? <Image src={`${BACKEND_DOMAIN}${homeData.hero.aiBannerImage}`} alt="AI Banner" width={300} height={150} className="image-preview" />
-                          : null
-                        )
-                      )
-                    }
-                  </div>
-                  <input type="file" onChange={(e) => handleFileChange(e, 'hero-aiBannerImage')} accept="image/*" className="form-file-input"/>
-                </FormItem>
-            </div>
+      {/* Hero Section - Multiple Banners */}
+      <AdminSectionCard title="Hero Banners (Slider)" onSave={() => handleSave('heroes')} isSaving={saving === 'heroes'} hasChanges={hasChanges('heroes')}>
+        <div style={{ marginBottom: '20px' }}>
+          <button 
+            onClick={() => {
+              const newHero: HeroData = {
+                title: 'New Banner Title',
+                subtitle: '',
+                backgroundImage: '',
+                videoUrl: '',
+                isActive: true,
+                aiBannerImage: '',
+                aiBannerTitle: '',
+                order: (homeData?.heroes?.length || 0)
+              };
+              setHomeData(prev => prev ? ({
+                ...prev,
+                heroes: [...(prev.heroes || []), newHero]
+              }) : prev);
+            }}
+            className="btn-add"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            <FiPlusCircle /> Add New Hero Banner
+          </button>
         </div>
+
+        {homeData?.heroes && homeData.heroes.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {homeData.heroes.map((hero, index) => (
+              <div key={index} style={{ border: '2px solid #e0e0e0', borderRadius: '8px', padding: '20px', background: '#f9f9f9' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                  <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span>Banner #{index + 1}</span>
+                    <span style={{ fontSize: '14px', color: '#666', background: '#fff', padding: '4px 12px', borderRadius: '12px' }}>
+                      Order: {hero.order}
+                    </span>
+                  </h4>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button
+                      onClick={() => {
+                        if (index > 0) {
+                          const newHeroes = [...homeData.heroes];
+                          [newHeroes[index], newHeroes[index - 1]] = [newHeroes[index - 1], newHeroes[index]];
+                          newHeroes[index].order = index;
+                          newHeroes[index - 1].order = index - 1;
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }
+                      }}
+                      disabled={index === 0}
+                      style={{ padding: '6px 12px', cursor: index === 0 ? 'not-allowed' : 'pointer', opacity: index === 0 ? 0.5 : 1 }}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (index < homeData.heroes.length - 1) {
+                          const newHeroes = [...homeData.heroes];
+                          [newHeroes[index], newHeroes[index + 1]] = [newHeroes[index + 1], newHeroes[index]];
+                          newHeroes[index].order = index;
+                          newHeroes[index + 1].order = index + 1;
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }
+                      }}
+                      disabled={index === homeData.heroes.length - 1}
+                      style={{ padding: '6px 12px', cursor: index === homeData.heroes.length - 1 ? 'not-allowed' : 'pointer', opacity: index === homeData.heroes.length - 1 ? 0.5 : 1 }}
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete Banner #${index + 1}?`)) {
+                          const newHeroes = homeData.heroes.filter((_, i) => i !== index);
+                          newHeroes.forEach((h, i) => h.order = i);
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }
+                      }}
+                      style={{ padding: '6px 12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid-2-col">
+                  <div className="form-column">
+                    <FormItem label="Button Text (Hiển thị ở góc phải dưới)" icon={<FiType />}>
+                      <input
+                        type="text"
+                        value={hero.title || ''}
+                        onChange={(e) => {
+                          const newHeroes = [...homeData.heroes];
+                          newHeroes[index].title = e.target.value;
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }}
+                        className="form-input"
+                        placeholder="VD: CHƯƠNG TRÌNH ĐÀO TẠO KỸ SƯ"
+                      />
+                    </FormItem>
+
+                    <FormItem label="Button Link" icon={<FiLink />}>
+                      <input
+                        type="text"
+                        value={hero.buttonLink || ''}
+                        onChange={(e) => {
+                          const newHeroes = [...homeData.heroes];
+                          newHeroes[index].buttonLink = e.target.value;
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }}
+                        className="form-input"
+                        placeholder="VD: /for-engineers hoặc https://..."
+                      />
+                    </FormItem>
+
+                    <FormItem label="Text giữa màn hình (Optional)" icon={<FiFileText />}>
+                      <input
+                        type="text"
+                        value={hero.subtitle || ''}
+                        onChange={(e) => {
+                          const newHeroes = [...homeData.heroes];
+                          newHeroes[index].subtitle = e.target.value;
+                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                        }}
+                        className="form-input"
+                        placeholder="Text hiển thị giữa banner (optional)"
+                      />
+                    </FormItem>
+
+                    <FormItem label="Upload Banner Image" icon={<FiImage />}>
+                      <input
+                        type="file"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setFiles(prev => ({ ...prev, [`hero-${index}`]: file }));
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setHeroPreview(prev => ({ ...prev, [`hero-${index}`]: reader.result as string }));
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        accept="image/*"
+                        className="form-file-input"
+                      />
+                    </FormItem>
+
+                    <FormItem label="Active" icon={<FiCheck />}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <input
+                          type="checkbox"
+                          checked={hero.isActive}
+                          onChange={(e) => {
+                            const newHeroes = [...homeData.heroes];
+                            newHeroes[index].isActive = e.target.checked;
+                            setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
+                          }}
+                        />
+                        Show this banner
+                      </label>
+                    </FormItem>
+                  </div>
+
+                  <div className="form-column">
+                    <FormItem label="Current Banner Image" icon={<FiEye />}>
+                      <div className="image-preview-container">
+                        {heroPreview[`hero-${index}`] ? (
+                          <Image src={heroPreview[`hero-${index}`]} alt="Preview" width={300} height={150} className="image-preview" />
+                        ) : hero.backgroundImage ? (
+                          <Image src={`${BACKEND_DOMAIN}${hero.backgroundImage}`} alt="Banner" width={300} height={150} className="image-preview" />
+                        ) : (
+                          <div style={{ padding: '40px', background: '#f0f0f0', textAlign: 'center', borderRadius: '8px', color: '#999' }}>
+                            No image uploaded
+                          </div>
+                        )}
+                      </div>
+                    </FormItem>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ padding: '40px', textAlign: 'center', background: '#f9f9f9', borderRadius: '8px', color: '#666' }}>
+            <p>No hero banners yet. Click "Add New Hero Banner" to create one.</p>
+          </div>
+        )}
       </AdminSectionCard>
 
       {/* Factory Video Section */}

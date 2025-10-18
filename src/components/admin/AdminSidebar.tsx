@@ -161,21 +161,22 @@ export default function AdminSidebar() {
         <div className="logo-container">
           {isCollapsed ? (
             <Image
-              src="/images/sg3_small_logo.svg"
-              alt="Saigon 3 Jeans"
+              src="/images/LogoNexxtStepVN.png"
+              alt="Next Step VN"
               width={40}
               height={40}
               className="sidebar-logo-small"
               priority
+              style={{ objectFit: 'contain' }}
             />
           ) : (
             <Image
-              src="/images/sg3jeans_logo.png"
-              alt="Saigon 3 Jeans"
+              src="/images/LogoNexxtStepVN.png"
+              alt="Next Step VN"
               width={150}
-              height={40}
+              height={50}
               className="sidebar-logo-image"
-              style={{ width: '100%', height: 'auto' }}
+              style={{ width: 'auto', height: '50px', maxWidth: '100%' }}
               priority
             />
           )}

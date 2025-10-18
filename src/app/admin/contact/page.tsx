@@ -468,30 +468,17 @@ export default function AdminContactPage() {
                 <h3>Địa chỉ</h3>
               </div>
               <div className="form-row">
-                <div className="form-column">
+                <div className="form-column" style={{ width: '100%' }}>
                   <label className="form-label">
                     <FiMapPin />
-                    Địa chỉ 1 
+                    Địa chỉ công ty
                   </label>
                   <textarea
                     value={contactInfo.address1 || ''}
                     onChange={(e) => handleContactInputChange('address1', e.target.value)}
                     className="form-textarea"
                     rows={3}
-                    placeholder={contactInfo.address1 ? '' : "Nhập địa chỉ văn phòng HCM..."}
-                  />
-                </div>
-                <div className="form-column">
-                  <label className="form-label">
-                    <FiMapPin />
-                    Địa chỉ 2 
-                  </label>
-                  <textarea
-                    value={contactInfo.address2 || ''}
-                    onChange={(e) => handleContactInputChange('address2', e.target.value)}
-                    className="form-textarea"
-                    rows={3}
-                    placeholder={contactInfo.address2 ? '' : "Nhập địa chỉ nhà máy Đồng Nai..."}
+                    placeholder="Nhập địa chỉ công ty..."
                   />
                 </div>
               </div>
