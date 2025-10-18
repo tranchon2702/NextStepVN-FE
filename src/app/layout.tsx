@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 import ClientScriptProvider from "../components/ClientScriptProvider";
+import Providers from "./providers";
 
 const montserrat = Montserrat({ 
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -91,9 +92,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className={`${montserrat.className} ${montserrat.variable} ${merriweather.variable} ${notoSansJP.variable}`} suppressHydrationWarning>
+        <Providers>
         <ClientScriptProvider />
         {children}
         <ToastContainer position="top-right" autoClose={3000} />
+        </Providers>
       </body>
     </html>
   );

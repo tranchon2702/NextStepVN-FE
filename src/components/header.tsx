@@ -1,17 +1,16 @@
-"use client";
+'use client';
 
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import ClientOnly from "./ClientOnly";
-// import { usePathname } from "next/navigation";
+import { useTranslation } from 'next-i18next';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [expandedMenus, setExpandedMenus] = useState<{[key: string]: boolean}>({});
-  const [language, setLanguage] = useState<'vi' | 'ja'>('vi');
+  const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
   const [searchQuery, setSearchQuery] = useState("");
-  // const pathname = usePathname();
+  const { t, i18n } = useTranslation("header");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,7 +29,8 @@ export default function Header() {
   };
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'vi' ? 'ja' : 'vi');
+    const newLanguage = i18n.language === 'vi' ? 'ja' : 'vi';
+    i18n.changeLanguage(newLanguage);
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -41,7 +41,6 @@ export default function Header() {
     }
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -60,7 +59,6 @@ export default function Header() {
     };
   }, [isMenuOpen]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -89,139 +87,96 @@ export default function Header() {
                 />
                 <div className="brand-slogan">
                   <span className="brand-slogan-main">NEXT STEP VIET NAM</span>
-                  <span className="brand-slogan-sub">Viết tiếp tương lai cùng bạn!</span>
+                  <span className="brand-slogan-sub">{t('slogan')}</span>
                 </div>
               </div>
             </Link>
 
-            {/* Desktop Menu */}
             <div className="d-none d-lg-flex align-items-center">
               <ul className="navbar-nav">
-                {/* GIỚI THIỆU Dropdown */}
                 <li className="nav-item dropdown">
-                  <span className="nav-link dropdown-toggle">
-                    {language === 'vi' ? 'GIỚI THIỆU' : '紹介'}
-                  </span>
+                  <span className="nav-link dropdown-toggle">{t('introduction')}</span>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" href="/overview">
-                        {language === 'vi' ? 'Tổng quan về công ty' : '会社概要'}
-                      </Link>
+                      <Link className="dropdown-item" href="/overview">{t('company_overview')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/vision">
-                        {language === 'vi' ? 'Tầm nhìn chiến lược' : '戦略的ビジョン'}
-                      </Link>
+                      <Link className="dropdown-item" href="/vision">{t('strategic_vision')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/mission">
-                        {language === 'vi' ? 'Sứ mệnh' : 'ミッション'}
-                      </Link>
+                      <Link className="dropdown-item" href="/mission">{t('mission')}</Link>
                     </li>
                   </ul>
                 </li>
-
-                {/* DỊCH VỤ CÔNG TY Dropdown */}
                 <li className="nav-item dropdown">
-                  <span className="nav-link dropdown-toggle">
-                    {language === 'vi' ? 'DỊCH VỤ CÔNG TY' : '会社サービス'}
-                  </span>
+                  <span className="nav-link dropdown-toggle">{t('company_services')}</span>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" href="/for-engineers">
-                        {language === 'vi' ? 'Dành cho kỹ sư tìm việc' : 'エンジニア向け求人'}
-                      </Link>
+                      <Link className="dropdown-item" href="/for-engineers">{t('for_engineers')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/for-recruiters">
-                        {language === 'vi' ? 'Dành cho nhà tuyển dụng' : '採用担当者向け'}
-                      </Link>
+                      <Link className="dropdown-item" href="/for-recruiters">{t('for_recruiters')}</Link>
                     </li>
                   </ul>
                 </li>
-
-                {/* TIN TỨC */}
                 <li className="nav-item">
-                  <Link className="nav-link" href="/news">
-                    {language === 'vi' ? 'TIN TỨC' : 'ニュース'}
-                  </Link>
+                  <Link className="nav-link" href="/news">{t('news')}</Link>
                 </li>
-
-                {/* LIÊN HỆ */}
                 <li className="nav-item">
-                  <Link className="nav-link" href="/contact">
-                    {language === 'vi' ? 'LIÊN HỆ' : 'お問い合わせ'}
-                  </Link>
+                  <Link className="nav-link" href="/contact">{t('contact')}</Link>
                 </li>
               </ul>
 
-              {/* Search Bar */}
               <div className="header-search-container">
                 <form onSubmit={handleSearch} className="header-search-form">
                   <input
                     type="text"
                     className="header-search-input"
-                    placeholder={language === 'vi' ? 'Tìm kiếm...' : '検索...'}
+                    placeholder={t('search_placeholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <button
-                    type="submit"
-                    className="header-search-btn"
-                  >
+                  <button type="submit" className="header-search-btn">
                     <i className="fas fa-search"></i>
                   </button>
                 </form>
               </div>
 
-              {/* Language Switcher - Hiển thị ngôn ngữ hiện tại */}
               <button
                 className="language-switcher"
                 onClick={toggleLanguage}
                 aria-label="Switch language"
-                title={language === 'vi' ? 'Chuyển sang tiếng Nhật' : '日本語に切り替える'}
+                title={t('switch_language_title')}
               >
                 <Image
-                  src={language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
-                  alt={language === 'vi' ? 'Vietnamese' : 'Japanese'}
+                  src={i18n.language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
+                  alt={t('flag_alt')}
                   width={28}
                   height={20}
                   className="flag-icon"
                 />
                 <span className="language-text">
-                  {language === 'vi' ? 'VN' : 'JP'}
+                  {i18n.language === 'vi' ? 'VN' : 'JP'}
                 </span>
               </button>
             </div>
 
-            {/* Mobile Menu Toggle */}
             <button
               className="navbar-toggler d-lg-none"
               type="button"
               onClick={toggleMenu}
               aria-label="Toggle navigation"
             >
-              <span
-                className={`hamburger-line ${isMenuOpen ? "active" : ""}`}
-              ></span>
-              <span
-                className={`hamburger-line ${isMenuOpen ? "active" : ""}`}
-              ></span>
-              <span
-                className={`hamburger-line ${isMenuOpen ? "active" : ""}`}
-              ></span>
+              <span className={`hamburger-line ${isMenuOpen ? "active" : ""}`}></span>
+              <span className={`hamburger-line ${isMenuOpen ? "active" : ""}`}></span>
+              <span className={`hamburger-line ${isMenuOpen ? "active" : ""}`}></span>
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`mobile-menu-overlay ${isMenuOpen ? "active" : ""}`}
-        onClick={closeMenu}
-      ></div>
+      <div className={`mobile-menu-overlay ${isMenuOpen ? "active" : ""}`} onClick={closeMenu}></div>
 
-      {/* Mobile Menu Drawer */}
       <div className={`mobile-menu-drawer ${isMenuOpen ? "active" : ""}`}>
         <div className="mobile-menu-header">
           <button className="mobile-menu-close" onClick={closeMenu}>
@@ -229,30 +184,28 @@ export default function Header() {
           </button>
         </div>
         <ul className="mobile-menu-nav">
-          {/* Language Switcher Mobile */}
           <li className="mobile-nav-item mobile-language-toggle">
-            <button 
-              className="mobile-nav-link language-switch-btn" 
+            <button
+              className="mobile-nav-link language-switch-btn"
               onClick={toggleLanguage}
             >
               <Image
-                src={language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
-                alt="Flag"
+                src={i18n.language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
+                alt={t('flag_alt')}
                 width={24}
                 height={16}
                 className="flag-icon"
               />
-              {language === 'vi' ? 'Tiếng Việt (VN)' : '日本語 (JP)'}
+              {t('language_name')}
             </button>
           </li>
 
-          {/* Search Mobile */}
           <li className="mobile-nav-item mobile-search">
             <form onSubmit={handleSearch} className="mobile-search-form">
               <input
                 type="text"
                 className="mobile-search-input"
-                placeholder={language === 'vi' ? 'Tìm kiếm...' : '検索...'}
+                placeholder={t('search_placeholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -262,77 +215,73 @@ export default function Header() {
             </form>
           </li>
 
-          {/* GIỚI THIỆU with submenu */}
           <li className="mobile-nav-item has-submenu">
-            <div 
-              className="mobile-nav-link parent-link" 
+            <div
+              className="mobile-nav-link parent-link"
               onClick={() => toggleSubmenu('introduction')}
             >
               <i className="fas fa-building"></i>
-              {language === 'vi' ? 'GIỚI THIỆU' : '紹介'}
+              {t('introduction')}
               <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['introduction'] ? 'expanded' : ''}`}></i>
             </div>
             <ul className={`mobile-submenu ${expandedMenus['introduction'] ? 'expanded' : ''}`}>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/overview" onClick={closeMenu}>
                   <i className="fas fa-eye"></i>
-                  {language === 'vi' ? 'Tổng quan về công ty' : '会社概要'}
+                  {t('company_overview')}
                 </Link>
               </li>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/vision" onClick={closeMenu}>
                   <i className="fas fa-lightbulb"></i>
-                  {language === 'vi' ? 'Tầm nhìn chiến lược' : '戦略的ビジョン'}
+                  {t('strategic_vision')}
                 </Link>
               </li>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/mission" onClick={closeMenu}>
                   <i className="fas fa-bullseye"></i>
-                  {language === 'vi' ? 'Sứ mệnh' : 'ミッション'}
+                  {t('mission')}
                 </Link>
               </li>
             </ul>
           </li>
 
-          {/* DỊCH VỤ CÔNG TY with submenu */}
           <li className="mobile-nav-item has-submenu">
-            <div 
-              className="mobile-nav-link parent-link" 
+            <div
+              className="mobile-nav-link parent-link"
               onClick={() => toggleSubmenu('services')}
             >
               <i className="fas fa-briefcase"></i>
-              {language === 'vi' ? 'DỊCH VỤ CÔNG TY' : '会社サービス'}
+              {t('company_services')}
               <i className={`fas fa-chevron-down submenu-arrow ${expandedMenus['services'] ? 'expanded' : ''}`}></i>
             </div>
             <ul className={`mobile-submenu ${expandedMenus['services'] ? 'expanded' : ''}`}>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/for-engineers" onClick={closeMenu}>
                   <i className="fas fa-user-tie"></i>
-                  {language === 'vi' ? 'Dành cho kỹ sư tìm việc' : 'エンジニア向け求人'}
+                  {t('for_engineers')}
                 </Link>
               </li>
               <li>
                 <Link className="mobile-nav-link submenu-item" href="/for-recruiters" onClick={closeMenu}>
                   <i className="fas fa-user-friends"></i>
-                  {language === 'vi' ? 'Dành cho nhà tuyển dụng' : '採用担当者向け'}
+                  {t('for_recruiters')}
                 </Link>
               </li>
             </ul>
           </li>
 
-          {/* TIN TỨC */}
           <li className="mobile-nav-item">
             <Link className="mobile-nav-link" href="/news" onClick={closeMenu}>
               <i className="fas fa-newspaper"></i>
-              {language === 'vi' ? 'TIN TỨC' : 'ニュース'}
+              {t('news')}
             </Link>
           </li>
 
-          {/* LIÊN HỆ */}
           <li className="mobile-nav-item">
             <Link className="mobile-nav-link" href="/contact" onClick={closeMenu}>
               <i className="fas fa-envelope"></i>
-              {language === 'vi' ? 'LIÊN HỆ' : 'お問い合わせ'}
+              {t('contact')}
             </Link>
           </li>
         </ul>
