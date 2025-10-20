@@ -32,6 +32,9 @@ interface NewsData {
   pagination: Pagination;
 }
 
+// Revalidate every 60 seconds for news listings
+export const revalidate = 60;
+
 async function getNewsData(page: number, limit: number, search?: string): Promise<NewsData | null> {
   try {
     let url = `${BACKEND_DOMAIN}/api/home/news/all?page=${page}&limit=${limit}`;
@@ -39,7 +42,9 @@ async function getNewsData(page: number, limit: number, search?: string): Promis
       url += `&search=${encodeURIComponent(search)}`;
     }
     console.log('📡 Fetching news from:', url);
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { 
+      next: { revalidate: 60 } 
+    });
     const data = await res.json();
     console.log('📰 News data received:', data.data?.pagination);
     if (data.success) return data.data;

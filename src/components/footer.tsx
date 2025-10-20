@@ -37,11 +37,6 @@ export default function Footer() {
     fetchContactInfo();
   }, []);
 
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'vi' ? 'ja' : 'vi';
-    i18n.changeLanguage(newLanguage);
-  };
-
   return (
     <ClientOnly>
       <footer className="nextstep-footer">
@@ -74,23 +69,6 @@ export default function Footer() {
                       <i className="fab fa-youtube"></i>
                     </Link>
                   </div>
-                  <button
-                    className="language-switcher mt-3"
-                    onClick={toggleLanguage}
-                    aria-label="Switch language"
-                    title={t('switch_language_title')}
-                  >
-                    <Image
-                      src={i18n.language === 'vi' ? '/images/vn.webp' : '/images/jp.webp'}
-                      alt={t('flag_alt')}
-                      width={28}
-                      height={20}
-                      className="flag-icon"
-                    />
-                    <span className="language-text">
-                      {i18n.language === 'vi' ? 'VN' : 'JP'}
-                    </span>
-                  </button>
                 </div>
               </div>
 

@@ -1,6 +1,6 @@
 {
-  "name": "saigon3jean-next",
-  "version": "0.1.0",
+  "name": "nextstepvn-frontend",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

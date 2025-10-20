@@ -9,6 +9,9 @@ export const metadata = {
   description: "Tìm kiếm và lựa chọn ứng viên phù hợp",
 };
 
+// Static page, cache for 5 minutes
+export const revalidate = 300;
+
 export default function CandidatesPage() {
   return (
     <>
@@ -29,5 +32,6 @@ export default function CandidatesPage() {
     </>
   );
 }
+
 
 

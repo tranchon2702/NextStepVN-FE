@@ -424,8 +424,8 @@ export default function Recruitment({ jobs, contactHr, contactInfo }: Recruitmen
                   <div className="card h-100">
                     <div className="card-body text-center">
                       <Image
-                        src="/images/sg3jeans_logo.png"
-                        alt="Saigon 3 Jean Logo"
+                        src="/images/LogoNexxtStepVN.png"
+                        alt="Next Step Viet Nam"
                         className="company-logo mb-4"
                         width={160}
                         height={80}

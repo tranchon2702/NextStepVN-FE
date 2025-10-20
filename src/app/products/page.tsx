@@ -3,10 +3,13 @@ import Header from "@/components/header";
 import Products from "@/components/pages/products";
 import { BACKEND_DOMAIN } from '@/api/config';
 
-export const dynamic = "force-dynamic";
+// Revalidate every 60 seconds
+export const revalidate = 60;
 
 async function fetchProductsData() {
-  const res = await fetch(`${BACKEND_DOMAIN}/api/products/data`, { cache: 'no-store' });
+  const res = await fetch(`${BACKEND_DOMAIN}/api/products/data`, { 
+    next: { revalidate: 60 } 
+  });
   const apiData = await res.json();
   if (!apiData.success) throw new Error("Failed to fetch products data");
   return apiData.data || null;

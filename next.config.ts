@@ -1,63 +1,37 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Skip TypeScript type checking for now until we fix all pages
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  // Skip ESLint checking during builds
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  /* config options here */
   images: {
-    // Enable image optimization
-    unoptimized: false,
-    // Support WebP format
-    formats: ['image/webp'],
-    // Define device sizes for responsive images
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    // Define image sizes for thumbnails
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5001",
-        pathname: "/uploads/**",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5001",
-        pathname: "/images/**",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3007",
-        pathname: "/**",
-      },
-      // Production
-      {
         protocol: "https",
-        hostname: "saigon3jean.com",
-        pathname: "/uploads/**",
+        hostname: "**",
       },
-      {
-        protocol: "https",
-        hostname: "saigon3jean.com",
-        pathname: "/api/**",
-      },    
-      // Thêm localhost không cần port
       {
         protocol: "http",
         hostname: "localhost",
-        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "192.168.1.9",
       },
     ],
+    unoptimized: false,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ['image/webp'],
   },
-  // Enable compression for better performance
   compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    optimizeCss: true,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
 };
 
 export default nextConfig;

@@ -17,8 +17,8 @@ export default function AdminHeader() {
     <header className="admin-header">
       <div className="header-left">
         <Image
-          src="/images/sg3jeans_logo.png"
-          alt="Saigon 3 Jeans"
+          src="/images/LogoNexxtStepVN.png"
+          alt="Next Step Viet Nam"
           width={120}
           height={40}
           className="admin-logo"

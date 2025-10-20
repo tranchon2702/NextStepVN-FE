@@ -98,13 +98,13 @@ export default function Header() {
                   <span className="nav-link dropdown-toggle">{t('introduction')}</span>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" href="/overview">{t('company_overview')}</Link>
+                      <Link className="dropdown-item" href="/overview" prefetch={true}>{t('company_overview')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/vision">{t('strategic_vision')}</Link>
+                      <Link className="dropdown-item" href="/vision" prefetch={true}>{t('strategic_vision')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/mission">{t('mission')}</Link>
+                      <Link className="dropdown-item" href="/mission" prefetch={true}>{t('mission')}</Link>
                     </li>
                   </ul>
                 </li>
@@ -112,18 +112,18 @@ export default function Header() {
                   <span className="nav-link dropdown-toggle">{t('company_services')}</span>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" href="/for-engineers">{t('for_engineers')}</Link>
+                      <Link className="dropdown-item" href="/for-engineers" prefetch={true}>{t('for_engineers')}</Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" href="/for-recruiters">{t('for_recruiters')}</Link>
+                      <Link className="dropdown-item" href="/for-recruiters" prefetch={true}>{t('for_recruiters')}</Link>
                     </li>
                   </ul>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href="/news">{t('news')}</Link>
+                  <Link className="nav-link" href="/news" prefetch={true}>{t('news')}</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" href="/contact">{t('contact')}</Link>
+                  <Link className="nav-link" href="/contact" prefetch={true}>{t('contact')}</Link>
                 </li>
               </ul>
 

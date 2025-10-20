@@ -37,11 +37,36 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "Next Step Viet Nam",
-  description: "Next Step Viet Nam - Kết nối kỹ sư với cơ hội nghề nghiệp tại Nhật Bản",
+  title: "Next Step Viet Nam - Kết Nối Kỹ Sư Việt Nam Với Nhật Bản",
+  description: "Next Step Viet Nam - Đơn vị hàng đầu trong lĩnh vực phát triển và cung ứng kỹ sư quốc tế, cầu nối nhân lực chất lượng cao giữa Việt Nam và Nhật Bản",
+  keywords: "Next Step Viet Nam, tuyển dụng kỹ sư, việc làm Nhật Bản, engineer recruitment, Vietnam engineers",
+  authors: [{ name: "Next Step Viet Nam" }],
   icons: {
     icon: '/images/LogoNexxtStepVN.png',
     apple: '/images/LogoNexxtStepVN.png',
+    shortcut: '/images/LogoNexxtStepVN.png',
+  },
+  openGraph: {
+    title: "Next Step Viet Nam - Kết Nối Kỹ Sư Việt Nam Với Nhật Bản",
+    description: "Đơn vị hàng đầu trong lĩnh vực phát triển và cung ứng kỹ sư quốc tế",
+    url: "https://nextstepvn.com",
+    siteName: "Next Step Viet Nam",
+    images: [
+      {
+        url: '/images/LogoNexxtStepVN.png',
+        width: 1200,
+        height: 630,
+        alt: 'Next Step Viet Nam Logo',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Next Step Viet Nam - Kết Nối Kỹ Sư Việt Nam Với Nhật Bản",
+    description: "Đơn vị hàng đầu trong lĩnh vực phát triển và cung ứng kỹ sư quốc tế",
+    images: ['/images/LogoNexxtStepVN.png'],
   },
 };
 
@@ -68,7 +93,9 @@ export default function RootLayout({
           name="google-site-verification"
           content="google-site-verification=google-site-verification"
         />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" type="image/png" href="/images/LogoNexxtStepVN.png" />
+        <link rel="apple-touch-icon" href="/images/LogoNexxtStepVN.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
