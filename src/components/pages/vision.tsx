@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Vision() {
+  const { t } = useTranslation("vision");
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function Vision() {
         <div className="hero-overlay"></div>
         <Image
           src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&h=1080&fit=crop"
-          alt="Tầm Nhìn Chiến Lược NEXT STEP"
+          alt={t('hero_alt')}
           fill
           priority
           className="hero-bg"
@@ -43,9 +45,9 @@ export default function Vision() {
         />
         <div className="container">
           <div className="hero-content">
-            <h1 className="hero-title">Tầm Nhìn Chiến Lược</h1>
+            <h1 className="hero-title">{t('hero_title')}</h1>
             <div className="hero-divider"></div>
-            <p className="hero-subtitle">2025 - 2035</p>
+            <p className="hero-subtitle">{t('hero_subtitle')}</p>
           </div>
         </div>
       </section>
@@ -64,7 +66,7 @@ export default function Vision() {
                 <div className="statement-image">
                   <Image
                     src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop"
-                    alt="Tầm Nhìn 10 Năm"
+                    alt={t('statement_image_alt')}
                     width={800}
                     height={600}
                     className="img-fluid rounded"
@@ -76,13 +78,13 @@ export default function Vision() {
                 <div className="statement-content">
                   <div className="section-badge">
                     <i className="fas fa-bullseye"></i>
-                    <span>Tầm Nhìn 10 Năm</span>
+                    <span>{t('statement_badge')}</span>
                   </div>
                   <h2 className="section-title">
-                    Tầm Nhìn Chiến Lược Của NEXT STEP <br/>(2025–2035)
+                    {t('statement_title')}
                   </h2>
                   <p className="lead-text">
-                    Trong 10 năm tới, NEXT STEP hướng tới trở thành <strong>tập đoàn hàng đầu khu vực châu Á</strong> trong lĩnh vực phát triển và cung ứng kỹ sư quốc tế, đặc biệt là cầu nối nhân lực chất lượng cao giữa Việt Nam và Nhật Bản.
+                    {t('statement_lead')}
                   </p>
                 </div>
               </div>
@@ -97,9 +99,9 @@ export default function Vision() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-columns"></i>
-                <span>Ba Trụ Cột Chiến Lược</span>
+                <span>{t('pillars_badge')}</span>
               </div>
-              <h2 className="section-title">Hệ Sinh Thái Toàn Diện</h2>
+              <h2 className="section-title">{t('pillars_title')}</h2>
             </div>
 
             <div className="row g-4">
@@ -108,9 +110,9 @@ export default function Vision() {
                   <div className="pillar-icon">
                     <i className="fas fa-graduation-cap"></i>
                   </div>
-                  <h3 className="pillar-title">Đào Tạo</h3>
+                  <h3 className="pillar-title">{t('pillar_1_title')}</h3>
                   <p className="pillar-text">
-                    Xây dựng hệ sinh thái đào tạo – kết nối – phát triển nghề nghiệp toàn diện, nơi mà kỹ sư Việt được trang bị đầy đủ nguồn lực ngôn ngữ, kỹ thuật và tư duy toàn cầu để đáp ứng nhu cầu ngày càng cao của các doanh nghiệp quốc tế.
+                    {t('pillar_1_text')}
                   </p>
                 </div>
               </div>
@@ -120,9 +122,9 @@ export default function Vision() {
                   <div className="pillar-icon">
                     <i className="fas fa-link"></i>
                   </div>
-                  <h3 className="pillar-title">Kết Nối</h3>
+                  <h3 className="pillar-title">{t('pillar_2_title')}</h3>
                   <p className="pillar-text">
-                    Mở rộng mạng lưới hợp tác với các trường đại học, viện đào tạo và doanh nghiệp tại Việt Nam và Nhật Bản, đồng thời ứng dụng công nghệ số trong quản lý, đào tạo và tuyển dụng để nâng cao hiệu quả và chất lượng dịch vụ.
+                    {t('pillar_2_text')}
                   </p>
                 </div>
               </div>
@@ -132,9 +134,9 @@ export default function Vision() {
                   <div className="pillar-icon">
                     <i className="fas fa-rocket"></i>
                   </div>
-                  <h3 className="pillar-title">Phát Triển</h3>
+                  <h3 className="pillar-title">{t('pillar_3_title')}</h3>
                   <p className="pillar-text">
-                    Đến năm 2035, NEXT STEP phấn đấu trở thành biểu tượng uy tín về phát triển nguồn nhân lực kỹ thuật Việt Nam, góp phần đưa hàng nghìn kỹ sư Việt vươn tới thế giới, khẳng định vị thế và trí tuệ Việt Nam trên sàn diễn quốc tế.
+                    {t('pillar_3_text')}
                   </p>
                 </div>
               </div>
@@ -152,23 +154,23 @@ export default function Vision() {
                   <div className="objective-icon">
                     <i className="fas fa-trophy"></i>
                   </div>
-                  <h3 className="objective-title">Mục Tiêu Đến 2035</h3>
+                  <h3 className="objective-title">{t('objective_1_title')}</h3>
                   <ul className="objective-list">
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Trở thành tập đoàn hàng đầu châu Á về phát triển kỹ sư quốc tế</span>
+                      <span>{t('objective_1_item_1')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Biểu tượng uy tín về phát triển nguồn nhân lực kỹ thuật Việt Nam</span>
+                      <span>{t('objective_1_item_2')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Đưa hàng nghìn kỹ sư Việt vươn tới thế giới</span>
+                      <span>{t('objective_1_item_3')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Khẳng định vị thế và trí tuệ Việt Nam trên sàn diễn quốc tế</span>
+                      <span>{t('objective_1_item_4')}</span>
                     </li>
                   </ul>
                 </div>
@@ -179,23 +181,23 @@ export default function Vision() {
                   <div className="objective-icon">
                     <i className="fas fa-lightbulb"></i>
                   </div>
-                  <h3 className="objective-title">Giá Trị Cốt Lõi</h3>
+                  <h3 className="objective-title">{t('objective_2_title')}</h3>
                   <ul className="objective-list">
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Chất lượng đào tạo hàng đầu với chuẩn quốc tế</span>
+                      <span>{t('objective_2_item_1')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Ứng dụng công nghệ số hiện đại trong quản lý và đào tạo</span>
+                      <span>{t('objective_2_item_2')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Mạng lưới đối tác rộng khắp Việt Nam và Nhật Bản</span>
+                      <span>{t('objective_2_item_3')}</span>
                     </li>
                     <li>
                       <i className="fas fa-check-circle"></i>
-                      <span>Cam kết phát triển bền vững và trách nhiệm xã hội</span>
+                      <span>{t('objective_2_item_4')}</span>
                     </li>
                   </ul>
                 </div>
@@ -211,38 +213,47 @@ export default function Vision() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-calendar-alt"></i>
-                <span>Lộ Trình Phát Triển</span>
+                <span>{t('timeline_badge')}</span>
               </div>
-              <h2 className="section-title">Hành Trình 10 Năm</h2>
+              <h2 className="section-title">{t('timeline_title')}</h2>
               <p className="section-subtitle">
-                Từ tầm nhìn đến hiện thực - Chiến lược phát triển bền vững
+                {t('timeline_subtitle')}
               </p>
             </div>
 
-            <div className="timeline">
-              <div className="timeline-item">
-                <div className="timeline-marker">2025-2027</div>
-                <div className="timeline-content">
-                  <h4>Giai Đoạn 1: Xây Dựng Nền Tảng</h4>
-                  <p>Thiết lập hệ thống đào tạo chuẩn quốc tế, mở rộng mạng lưới đối tác chiến lược</p>
+            <div className="vertical-timeline">
+              <div className="vt-line" />
+
+              <div className="vt-item">
+                <div className="vt-dot">
+                  <span className="vt-year">2025-2027</span>
+                </div>
+                <div className="vt-body">
+                  <h4 className="vt-title">{t('timeline_1_title')}</h4>
+                  <p className="vt-text">{t('timeline_1_text')}</p>
                 </div>
               </div>
 
-              <div className="timeline-item">
-                <div className="timeline-marker">2028-2030</div>
-                <div className="timeline-content">
-                  <h4>Giai Đoạn 2: Mở Rộng & Phát Triển</h4>
-                  <p>Ứng dụng công nghệ số, tăng quy mô đào tạo, mở rộng thị trường châu Á</p>
+              <div className="vt-item">
+                <div className="vt-dot accent">
+                  <span className="vt-year">2028-2030</span>
+                </div>
+                <div className="vt-body">
+                  <h4 className="vt-title">{t('timeline_2_title')}</h4>
+                  <p className="vt-text">{t('timeline_2_text')}</p>
                 </div>
               </div>
 
-              <div className="timeline-item">
-                <div className="timeline-marker">2031-2035</div>
-                <div className="timeline-content">
-                  <h4>Giai Đoạn 3: Dẫn Đầu Khu Vực</h4>
-                  <p>Trở thành tập đoàn hàng đầu châu Á, khẳng định thương hiệu quốc tế</p>
+              <div className="vt-item">
+                <div className="vt-dot">
+                  <span className="vt-year">2031-2035</span>
+                </div>
+                <div className="vt-body">
+                  <h4 className="vt-title">{t('timeline_3_title')}</h4>
+                  <p className="vt-text">{t('timeline_3_text')}</p>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -252,12 +263,12 @@ export default function Vision() {
             ref={(el) => { if (el) sectionsRef.current[4] = el; }}
           >
             <div className="cta-content">
-              <h3 className="cta-title">Cùng NEXT STEP Hiện Thực Hóa Ước Mơ</h3>
+              <h3 className="cta-title">{t('cta_title')}</h3>
               <p className="cta-text">
-                Tham gia cùng chúng tôi trong hành trình chinh phục thế giới
+                {t('cta_text')}
               </p>
               <a href="/contact" className="btn-cta">
-                Liên Hệ Ngay
+                {t('cta_button')}
                 <i className="fas fa-arrow-right"></i>
               </a>
             </div>
@@ -517,12 +528,12 @@ export default function Vision() {
           flex-shrink: 0;
         }
 
-        /* Timeline */
+        /* Timeline (vertical) */
         .timeline-section {
           margin-bottom: 80px;
           opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.6s ease;
+          transform: translateY(18px);
+          transition: all 0.6s cubic-bezier(.2,.9,.3,1);
         }
 
         .timeline-section.animate-in {
@@ -530,85 +541,95 @@ export default function Vision() {
           transform: translateY(0);
         }
 
-        .timeline {
+        .vertical-timeline {
           position: relative;
-          max-width: 800px;
+          max-width: 900px;
           margin: 0 auto;
-          padding: 20px 0;
+          padding: 20px 0 10px 0;
         }
 
-        .timeline::before {
-          content: '';
+        .vt-line {
           position: absolute;
-          left: 50%;
-          top: 0;
-          bottom: 0;
-          width: 2px;
-          background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
-          transform: translateX(-50%);
+          left: 40px;
+          top: 10px;
+          bottom: 10px;
+          width: 4px;
+          background: linear-gradient(180deg, rgba(220,38,38,0.95), rgba(153,27,27,0.95));
+          border-radius: 8px;
+          transform-origin: center;
+          box-shadow: 0 6px 18px rgba(220,38,38,0.12);
         }
 
-        .timeline-item {
+        .vt-item {
           position: relative;
-          margin-bottom: 60px;
+          padding: 18px 20px 18px 100px;
           display: flex;
-          align-items: center;
+          gap: 18px;
+          align-items: flex-start;
         }
 
-        .timeline-item:nth-child(odd) {
-          flex-direction: row;
-        }
-
-        .timeline-item:nth-child(even) {
-          flex-direction: row-reverse;
-        }
-
-        .timeline-marker {
+        .vt-dot {
           position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 120px;
-          height: 120px;
-          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          left: 8px;
+          top: 18px;
+          width: 64px;
+          height: 64px;
+          background: white;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: white;
-          font-size: 1.2rem;
-          font-weight: 700;
-          box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
-          z-index: 2;
-        }
-
-        .timeline-content {
-          width: calc(50% - 80px);
-          background: white;
-          padding: 30px;
-          border-radius: 12px;
-          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-          margin-right: auto;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content {
-          margin-left: auto;
-        }
-
-        .timeline-content h4 {
-          font-size: 1.3rem;
-          font-weight: 600;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+          border: 4px solid rgba(220,38,38,0.95);
           color: #dc2626;
-          margin-bottom: 10px;
+          font-weight: 700;
         }
 
-        .timeline-content p {
-          font-size: 1rem;
-          color: #718096;
-          line-height: 1.6;
+        .vt-dot.accent {
+          background: linear-gradient(135deg,#dc2626,#991b1b);
+          color: white;
+          border-color: rgba(0,0,0,0.06);
+        }
+
+        .vt-year {
+          font-size: 0.9rem;
+          text-align: center;
+          display: block;
+          padding: 4px 6px;
+        }
+
+        .vt-body {
+          background: white;
+          padding: 18px 22px;
+          border-radius: 12px;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+          flex: 1;
+        }
+
+        .vt-title {
+          margin: 0 0 8px 0;
+          font-size: 1.15rem;
+          color: #1a202c;
+          font-weight: 600;
+        }
+
+        .vt-text {
           margin: 0;
+          color: #556172;
+          line-height: 1.6;
+        }
+
+        /* small animation for items */
+        .vt-item { opacity: 0; transform: translateX(-12px); transition: all 0.5s ease; }
+        .timeline-section.animate-in .vt-item { opacity: 1; transform: translateX(0); }
+
+        @media (max-width: 768px) {
+          .vertical-timeline { padding-left: 0; }
+          .vt-line { left: 18px; }
+          .vt-item { padding-left: 72px; }
+          .vt-dot { left: -2px; width: 52px; height: 52px; }
+          .vt-body { padding: 14px 16px; }
+          .vt-title { font-size: 1rem; }
         }
 
         /* CTA */

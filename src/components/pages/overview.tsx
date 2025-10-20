@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { BACKEND_DOMAIN } from '@/api/config';
+import { useTranslation } from "react-i18next";
 
 // Interfaces for TypeScript
 interface Banner {
@@ -23,6 +24,7 @@ interface OverviewProps {
 }
 
 export default function Overview({ overviewData }: OverviewProps) {
+  const { t } = useTranslation("overview");
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -64,11 +66,11 @@ export default function Overview({ overviewData }: OverviewProps) {
           <div className="container">
             <div className="hero-text-box">
               <h1 className="hero-title" data-aos="fade-up">
-                TỔNG QUAN VỀ CÔNG TY
+                {t('hero_title')}
               </h1>
               <div className="hero-divider" data-aos="fade-up" data-aos-delay="100"></div>
               <p className="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
-                NEXT STEP - Nâng Tầm Kỹ Sư Việt, Vươn Tới Tương Lai Nhật Bản
+                {t('hero_subtitle')}
               </p>
             </div>
           </div>
@@ -89,7 +91,7 @@ export default function Overview({ overviewData }: OverviewProps) {
                   <div className="image-decoration"></div>
                   <Image
                     src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=1000&fit=crop"
-                    alt="NEXT STEP Vietnam - Đào tạo kỹ sư chất lượng cao"
+                    alt={t('intro_image_alt')}
                     width={500}
                     height={600}
                     className="intro-image"
@@ -101,20 +103,20 @@ export default function Overview({ overviewData }: OverviewProps) {
                 <div className="intro-content">
                   <div className="section-badge">
                     <i className="fas fa-building"></i>
-                    <span>Về Chúng Tôi</span>
+                    <span>{t('about_us')}</span>
                   </div>
                   <h2 className="section-title">
-                    NEXT STEP – Nâng Tầm Kỹ Sư Việt, Vươn Tới Tương Lai Nhật Bản
+                    {t('intro_title')}
                   </h2>
                   <div className="content-text">
                     <p className="lead-text">
-                      <strong>NEXT STEP</strong> là doanh nghiệp chuyên giới thiệu và đào tạo kỹ sư Việt Nam chất lượng cao sang làm việc tại Nhật Bản.
+                      <strong>NEXT STEP</strong> {t('intro_lead')}
                     </p>
                     <p>
-                      Công ty cung cấp chương trình đào tạo toàn diện, bao gồm <strong className="highlight-text">tiếng Nhật chuyên sâu</strong> và <strong className="highlight-text">kỹ năng kỹ thuật thực hành</strong>, giúp kỹ sư tự tin hòa nhập và đáp ứng tiêu chuẩn làm việc tại Nhật.
+                      {t('intro_description_1')}
                     </p>
                     <p>
-                      Với đội ngũ giảng viên giàu kinh nghiệm và phương pháp đào tạo thực tế, NEXT STEP cam kết mang đến cho doanh nghiệp Nhật nguồn nhân lực chất lượng, đồng thời mở ra cho kỹ sư Việt cơ hội phát triển sự nghiệp quốc tế.
+                      {t('intro_description_2')}
                     </p>
                   </div>
                 </div>
@@ -130,11 +132,11 @@ export default function Overview({ overviewData }: OverviewProps) {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-star"></i>
-                <span>Điểm Nổi Bật</span>
+                <span>{t('features_badge')}</span>
               </div>
-              <h2 className="section-title">Tại Sao Chọn NEXT STEP?</h2>
+              <h2 className="section-title">{t('features_title')}</h2>
               <p className="section-subtitle">
-                Chúng tôi tự hào mang đến giải pháp toàn diện cho kỹ sư Việt Nam
+                {t('features_subtitle')}
               </p>
             </div>
 
@@ -144,9 +146,9 @@ export default function Overview({ overviewData }: OverviewProps) {
                   <div className="feature-icon">
                     <i className="fas fa-graduation-cap"></i>
                   </div>
-                  <h4 className="feature-title">Đào Tạo Chuyên Sâu</h4>
+                  <h4 className="feature-title">{t('feature_1_title')}</h4>
                   <p className="feature-text">
-                    Chương trình đào tạo tiếng Nhật chuyên ngành và kỹ năng kỹ thuật thực hành toàn diện
+                    {t('feature_1_text')}
                   </p>
                 </div>
               </div>
@@ -155,34 +157,34 @@ export default function Overview({ overviewData }: OverviewProps) {
                 <div className="feature-card">
                   <div className="feature-icon">
                     <i className="fas fa-users"></i>
-          </div>
-                  <h4 className="feature-title">Giảng Viên Giàu Kinh Nghiệm</h4>
+                  </div>
+                  <h4 className="feature-title">{t('feature_2_title')}</h4>
                   <p className="feature-text">
-                    Đội ngũ giảng viên dày dặn kinh nghiệm, am hiểu văn hóa và môi trường làm việc Nhật Bản
+                    {t('feature_2_text')}
                   </p>
-        </div>
+                </div>
               </div>
 
               <div className="col-md-6 col-lg-3">
                 <div className="feature-card">
                   <div className="feature-icon">
                     <i className="fas fa-globe-asia"></i>
-            </div>
-                  <h4 className="feature-title">Cơ Hội Quốc Tế</h4>
+                  </div>
+                  <h4 className="feature-title">{t('feature_3_title')}</h4>
                   <p className="feature-text">
-                    Mở ra cơ hội phát triển sự nghiệp tại Nhật Bản với mức lương hấp dẫn và môi trường chuyên nghiệp
+                    {t('feature_3_text')}
                   </p>
-          </div>
-        </div>
+                </div>
+              </div>
         
               <div className="col-md-6 col-lg-3">
                 <div className="feature-card">
                   <div className="feature-icon">
                     <i className="fas fa-certificate"></i>
                   </div>
-                  <h4 className="feature-title">Chất Lượng Cam Kết</h4>
+                  <h4 className="feature-title">{t('feature_4_title')}</h4>
                   <p className="feature-text">
-                    Cam kết mang đến nguồn nhân lực chất lượng cao, đáp ứng tiêu chuẩn khắt khe của doanh nghiệp Nhật
+                    {t('feature_4_text')}
                   </p>
                 </div>
               </div>
@@ -199,27 +201,27 @@ export default function Overview({ overviewData }: OverviewProps) {
                 <div className="stat-card">
                   <div className="stat-icon">
                     <i className="fas fa-briefcase"></i>
-                          </div>
+                  </div>
                   <h3 className="stat-number">100+</h3>
-                  <p className="stat-label">Kỹ Sư Được Đào Tạo</p>
-                        </div>
-                      </div>
+                  <p className="stat-label">{t('stat_1_label')}</p>
+                </div>
+              </div>
               <div className="col-6 col-md-3">
                 <div className="stat-card">
                   <div className="stat-icon">
                     <i className="fas fa-handshake"></i>
                     </div>
                   <h3 className="stat-number">50+</h3>
-                  <p className="stat-label">Đối Tác Doanh Nghiệp</p>
+                  <p className="stat-label">{t('stat_2_label')}</p>
                   </div>
-            </div>
+              </div>
               <div className="col-6 col-md-3">
                 <div className="stat-card">
                   <div className="stat-icon">
                     <i className="fas fa-award"></i>
                   </div>
                   <h3 className="stat-number">95%</h3>
-                  <p className="stat-label">Tỷ Lệ Thành Công</p>
+                  <p className="stat-label">{t('stat_3_label')}</p>
                 </div>
               </div>
               <div className="col-6 col-md-3">
@@ -228,11 +230,11 @@ export default function Overview({ overviewData }: OverviewProps) {
                     <i className="fas fa-globe"></i>
                   </div>
                   <h3 className="stat-number">10+</h3>
-                  <p className="stat-label">Năm Kinh Nghiệm</p>
+                  <p className="stat-label">{t('stat_4_label')}</p>
                 </div>
               </div>
+            </div>
           </div>
-        </div>
 
           {/* CTA Section */}
           <div 
@@ -242,19 +244,19 @@ export default function Overview({ overviewData }: OverviewProps) {
             <div className="cta-card">
               <div className="row align-items-center">
                 <div className="col-lg-8 mb-4 mb-lg-0">
-                  <h3 className="cta-title">Sẵn Sàng Bắt Đầu Hành Trình Của Bạn?</h3>
+                  <h3 className="cta-title">{t('cta_title')}</h3>
                   <p className="cta-text">
-                    Hãy để NEXT STEP đồng hành cùng bạn chinh phục ước mơ làm việc tại Nhật Bản
+                    {t('cta_text')}
                   </p>
-              </div>
+                </div>
                 <div className="col-lg-4 text-lg-end">
                   <a href="/contact" className="btn-cta-simple">
-                    Liên Hệ Ngay
+                    {t('cta_button')}
                     <i className="fas fa-arrow-right"></i>
                   </a>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
           </div>
         </div>
       </section>

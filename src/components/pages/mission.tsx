@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Mission() {
+  const { t } = useTranslation("mission");
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function Mission() {
         <div className="hero-overlay"></div>
         <Image
           src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&h=1080&fit=crop"
-          alt="Sứ Mệnh NEXT STEP"
+          alt={t('hero_alt')}
           fill
           priority
           className="hero-bg"
@@ -43,9 +45,9 @@ export default function Mission() {
         />
         <div className="container">
           <div className="hero-content">
-            <h1 className="hero-title">Sứ Mệnh Của NEXT STEP</h1>
+            <h1 className="hero-title">{t('hero_title')}</h1>
             <div className="hero-divider"></div>
-            <p className="hero-subtitle">Kết nối - Đào tạo - Phát triển</p>
+            <p className="hero-subtitle">{t('hero_subtitle')}</p>
           </div>
         </div>
       </section>
@@ -62,20 +64,20 @@ export default function Mission() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-bullseye"></i>
-                <span>Sứ Mệnh</span>
+                <span>{t('statement_badge')}</span>
               </div>
-              <h2 className="section-title">Sứ Mệnh Của NEXT STEP</h2>
+              <h2 className="section-title">{t('statement_title')}</h2>
             </div>
 
             <div className="statement-card">
               <p className="statement-text">
-                NEXT STEP cam kết trở thành <strong className="highlight">cầu nối chất lượng nhất</strong> giữa kỹ năng tâm đầu của <strong className="highlight">kỹ sư Việt</strong> và nhu cầu <strong className="highlight">nhân lực cao cấp</strong> của các doanh nghiệp Nhật Bản.
+                {t('statement_text_1')}
               </p>
               <p className="statement-text">
-                Thông qua các giải thiệu việc làm mà còn đào tạo đến về <strong className="highlight">tiếng Nhật, kỹ năng chuyên môn</strong> và các <strong className="highlight">phong nghề nghiệp</strong>, giúp kỹ sư tự tin hội nhập và phát triển trong môi trường quốc tế.
+                {t('statement_text_2')}
               </p>
               <p className="statement-text">
-                NEXT STEP mong muốn trở thành <strong className="highlight">đối tác tin cậy</strong> của cả hai bên — hỗ trợ doanh nghiệp Nhật Bản tìm được nguồn nhân lực chất lượng, đồng thời mở ra cơ hội nghề nghiệp và tương lai tươi sáng cho kỹ sư Việt Nam.
+                {t('statement_text_3')}
               </p>
             </div>
           </div>
@@ -88,9 +90,9 @@ export default function Mission() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-heart"></i>
-                <span>Giá Trị Cốt Lõi</span>
+                <span>{t('values_badge')}</span>
               </div>
-              <h2 className="section-title">Những Giá Trị Chúng Tôi Theo Đuổi</h2>
+              <h2 className="section-title">{t('values_title')}</h2>
             </div>
 
             <div className="row g-4">
@@ -99,9 +101,9 @@ export default function Mission() {
                   <div className="value-icon">
                     <i className="fas fa-handshake"></i>
                   </div>
-                  <h3 className="value-title">Kết Nối</h3>
+                  <h3 className="value-title">{t('value_1_title')}</h3>
                   <p className="value-text">
-                    Xây dựng cầu nối chất lượng giữa kỹ sư Việt Nam và doanh nghiệp Nhật Bản
+                    {t('value_1_text')}
                   </p>
                 </div>
               </div>
@@ -111,9 +113,9 @@ export default function Mission() {
                   <div className="value-icon">
                     <i className="fas fa-graduation-cap"></i>
                   </div>
-                  <h3 className="value-title">Đào Tạo</h3>
+                  <h3 className="value-title">{t('value_2_title')}</h3>
                   <p className="value-text">
-                    Cung cấp chương trình đào tạo toàn diện về ngôn ngữ và kỹ năng chuyên môn
+                    {t('value_2_text')}
                   </p>
                 </div>
               </div>
@@ -123,9 +125,9 @@ export default function Mission() {
                   <div className="value-icon">
                     <i className="fas fa-medal"></i>
                   </div>
-                  <h3 className="value-title">Chất Lượng</h3>
+                  <h3 className="value-title">{t('value_3_title')}</h3>
                   <p className="value-text">
-                    Cam kết mang đến nguồn nhân lực chất lượng cao, đáp ứng tiêu chuẩn quốc tế
+                    {t('value_3_text')}
                   </p>
                 </div>
               </div>
@@ -135,9 +137,9 @@ export default function Mission() {
                   <div className="value-icon">
                     <i className="fas fa-rocket"></i>
                   </div>
-                  <h3 className="value-title">Phát Triển</h3>
+                  <h3 className="value-title">{t('value_4_title')}</h3>
                   <p className="value-text">
-                    Hỗ trợ kỹ sư tự tin hội nhập và phát triển sự nghiệp trong môi trường quốc tế
+                    {t('value_4_text')}
                   </p>
                 </div>
               </div>
@@ -153,17 +155,17 @@ export default function Mission() {
               <div className="col-lg-6 mb-4 mb-lg-0">
                 <div className="section-badge">
                   <i className="fas fa-tasks"></i>
-                  <span>Dịch Vụ Của Chúng Tôi</span>
+                  <span>{t('services_badge')}</span>
                 </div>
-                <h2 className="section-title">Chúng Tôi Làm Gì?</h2>
+                <h2 className="section-title">{t('services_title')}</h2>
                 
                 <div className="service-item">
                   <div className="service-icon">
                     <i className="fas fa-briefcase"></i>
                   </div>
                   <div className="service-content">
-                    <h4>Giới Thiệu Việc Làm</h4>
-                    <p>Kết nối kỹ sư Việt Nam với các cơ hội việc làm tại doanh nghiệp Nhật Bản hàng đầu</p>
+                    <h4>{t('service_1_title')}</h4>
+                    <p>{t('service_1_text')}</p>
                   </div>
                 </div>
 
@@ -172,8 +174,8 @@ export default function Mission() {
                     <i className="fas fa-language"></i>
                   </div>
                   <div className="service-content">
-                    <h4>Đào Tạo Tiếng Nhật</h4>
-                    <p>Chương trình học tiếng Nhật chuyên sâu, tập trung vào ngôn ngữ kỹ thuật và giao tiếp công việc</p>
+                    <h4>{t('service_2_title')}</h4>
+                    <p>{t('service_2_text')}</p>
                   </div>
                 </div>
 
@@ -182,8 +184,8 @@ export default function Mission() {
                     <i className="fas fa-cogs"></i>
                   </div>
                   <div className="service-content">
-                    <h4>Kỹ Năng Chuyên Môn</h4>
-                    <p>Nâng cao kỹ năng kỹ thuật và phương pháp làm việc theo chuẩn Nhật Bản</p>
+                    <h4>{t('service_3_title')}</h4>
+                    <p>{t('service_3_text')}</p>
                   </div>
                 </div>
 
@@ -192,8 +194,8 @@ export default function Mission() {
                     <i className="fas fa-users"></i>
                   </div>
                   <div className="service-content">
-                    <h4>Hỗ Trợ Hội Nhập</h4>
-                    <p>Tư vấn văn hóa, phong cách làm việc và hỗ trợ định cư tại Nhật Bản</p>
+                    <h4>{t('service_4_title')}</h4>
+                    <p>{t('service_4_text')}</p>
                   </div>
                 </div>
               </div>
@@ -202,7 +204,7 @@ export default function Mission() {
                 <div className="services-image">
                   <Image
                     src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=1000&fit=crop"
-                    alt="Dịch vụ NEXT STEP"
+                    alt={t('services_image_alt')}
                     width={800}
                     height={1000}
                     className="img-fluid rounded"
@@ -221,29 +223,29 @@ export default function Mission() {
             <div className="commitment-card">
               <div className="row align-items-center">
                 <div className="col-lg-8 mb-4 mb-lg-0">
-                  <h3 className="commitment-title">Cam Kết Của Chúng Tôi</h3>
+                  <h3 className="commitment-title">{t('commitment_title')}</h3>
                   <div className="commitment-list">
                     <div className="commitment-item">
                       <i className="fas fa-check-circle"></i>
-                      <span>Đối tác tin cậy của doanh nghiệp Nhật Bản</span>
+                      <span>{t('commitment_item_1')}</span>
                     </div>
                     <div className="commitment-item">
                       <i className="fas fa-check-circle"></i>
-                      <span>Nguồn nhân lực chất lượng cao, đáp ứng tiêu chuẩn khắt khe</span>
+                      <span>{t('commitment_item_2')}</span>
                     </div>
                     <div className="commitment-item">
                       <i className="fas fa-check-circle"></i>
-                      <span>Mở ra cơ hội nghề nghiệp và tương lai tươi sáng cho kỹ sư Việt</span>
+                      <span>{t('commitment_item_3')}</span>
                     </div>
                     <div className="commitment-item">
                       <i className="fas fa-check-circle"></i>
-                      <span>Đồng hành và hỗ trợ trong suốt hành trình phát triển</span>
+                      <span>{t('commitment_item_4')}</span>
                     </div>
                   </div>
                 </div>
                 <div className="col-lg-4 text-lg-end">
                   <a href="/contact" className="btn-commitment">
-                    Liên Hệ Với Chúng Tôi
+                    {t('commitment_button')}
                     <i className="fas fa-arrow-right"></i>
                   </a>
                 </div>
