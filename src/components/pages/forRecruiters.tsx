@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 // Candidate categories
 const candidateCategories = [
@@ -59,6 +60,7 @@ const candidateCategories = [
 ];
 
 export default function ForRecruiters() {
+  const { t } = useTranslation('recruiters');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -94,7 +96,7 @@ export default function ForRecruiters() {
         <div className="hero-overlay"></div>
         <Image
           src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1920&h=1080&fit=crop"
-          alt="Dành cho nhà tuyển dụng"
+          alt={t('hero_alt')}
           fill
           priority
           className="hero-bg"
@@ -103,9 +105,9 @@ export default function ForRecruiters() {
         />
         <div className="container">
           <div className="hero-content">
-            <h1 className="hero-title">Dành Cho Nhà Tuyển Dụng</h1>
+            <h1 className="hero-title">{t('hero_title')}</h1>
             <div className="hero-divider"></div>
-            <p className="hero-subtitle">Tìm kiếm ứng viên kỹ sư chất lượng cao từ Việt Nam</p>
+            <p className="hero-subtitle">{t('hero_subtitle')}</p>
           </div>
         </div>
       </section>
@@ -113,7 +115,7 @@ export default function ForRecruiters() {
       {/* Main Content */}
       <section className="recruiters-content">
         <div className="container">
-          
+
           {/* Introduction */}
           <div 
             className="intro-section"
@@ -122,11 +124,11 @@ export default function ForRecruiters() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-users"></i>
-                <span>Nguồn Nhân Lực Chất Lượng</span>
+                <span>{t('intro_badge')}</span>
               </div>
-              <h2 className="section-title">TÌM KIẾM ỨNG VIÊN</h2>
+              <h2 className="section-title">{t('intro_title')}</h2>
               <p className="section-subtitle">
-                Chúng tôi cung cấp kỹ sư Việt Nam có trình độ cao, sẵn sàng làm việc tại Nhật Bản
+                {t('intro_subtitle')}
               </p>
             </div>
           </div>
@@ -153,10 +155,10 @@ export default function ForRecruiters() {
                     />
                     <div className="card-overlay"></div>
                   </div>
-                  
+
                   <div className="card-content">
                     <h3 className="card-title">{category.name}</h3>
-                    
+
                     <div className="card-description">
                       <p className="description-text">{category.description}</p>
                       <p className="description-text">{category.details}</p>
@@ -167,12 +169,12 @@ export default function ForRecruiters() {
                       <Link href={`/candidates/${category.id}`} className="btn-contact-link">
                         <span className="btn-contact-inner">
                           <i className="fas fa-users"></i>
-                          <span>Xem Ứng Viên</span>
+                          <span>{t('view_candidates')}</span>
                         </span>
                       </Link>
                       <a href="/contact" className="btn-info">
                         <i className="fas fa-envelope"></i>
-                        Liên Hệ Ngay
+                        {t('contact_now')}
                       </a>
                     </div>
                   </div>
@@ -189,9 +191,9 @@ export default function ForRecruiters() {
             <div className="text-center mb-5">
               <div className="section-badge mx-auto">
                 <i className="fas fa-star"></i>
-                <span>Lợi Ích</span>
+                <span>{t('why_badge')}</span>
               </div>
-              <h2 className="section-title">Tại Sao Chọn NEXT STEP?</h2>
+              <h2 className="section-title">{t('why_title')}</h2>
             </div>
 
             <div className="row g-4">
@@ -200,9 +202,9 @@ export default function ForRecruiters() {
                   <div className="benefit-icon">
                     <i className="fas fa-user-check"></i>
                   </div>
-                  <h4 className="benefit-title">Ứng Viên Chất Lượng</h4>
+                  <h4 className="benefit-title">{t('benefit_1_title')}</h4>
                   <p className="benefit-text">
-                    Kỹ sư được đào tạo bài bản, có kinh nghiệm và kỹ năng chuyên môn cao
+                    {t('benefit_1_text')}
                   </p>
                 </div>
               </div>
@@ -212,9 +214,9 @@ export default function ForRecruiters() {
                   <div className="benefit-icon">
                     <i className="fas fa-language"></i>
                   </div>
-                  <h4 className="benefit-title">Tiếng Nhật Tốt</h4>
+                  <h4 className="benefit-title">{t('benefit_2_title')}</h4>
                   <p className="benefit-text">
-                    Ứng viên có khả năng giao tiếp tiếng Nhật từ N3 trở lên, sẵn sàng hội nhập
+                    {t('benefit_2_text')}
                   </p>
                 </div>
               </div>
@@ -224,9 +226,9 @@ export default function ForRecruiters() {
                   <div className="benefit-icon">
                     <i className="fas fa-headset"></i>
                   </div>
-                  <h4 className="benefit-title">Hỗ Trợ Toàn Diện</h4>
+                  <h4 className="benefit-title">{t('benefit_3_title')}</h4>
                   <p className="benefit-text">
-                    Tư vấn và hỗ trợ trong suốt quá trình tuyển dụng và hội nhập
+                    {t('benefit_3_text')}
                   </p>
                 </div>
               </div>
@@ -236,9 +238,9 @@ export default function ForRecruiters() {
                   <div className="benefit-icon">
                     <i className="fas fa-clock"></i>
                   </div>
-                  <h4 className="benefit-title">Nhanh Chóng</h4>
+                  <h4 className="benefit-title">{t('benefit_4_title')}</h4>
                   <p className="benefit-text">
-                    Quy trình tuyển dụng nhanh gọn, cung cấp hồ sơ ứng viên kịp thời
+                    {t('benefit_4_text')}
                   </p>
                 </div>
               </div>
@@ -252,14 +254,14 @@ export default function ForRecruiters() {
           >
             <div className="row align-items-center">
               <div className="col-lg-8 mb-4 mb-lg-0">
-                <h3 className="cta-title">Bạn Đang Tìm Kiếm Nhân Tài?</h3>
+                <h3 className="cta-title">{t('cta_title')}</h3>
                 <p className="cta-text">
-                  Liên hệ với chúng tôi ngay hôm nay để nhận tư vấn và hồ sơ ứng viên phù hợp nhất!
+                  {t('cta_text')}
                 </p>
               </div>
               <div className="col-lg-4 text-lg-end">
                 <a href="/contact" className="btn-cta">
-                  Liên Hệ Tư Vấn
+                  {t('cta_button')}
                   <i className="fas fa-arrow-right"></i>
                 </a>
               </div>

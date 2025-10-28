@@ -1,10 +1,14 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import ScrollToTop from '@/components/ScrollToTop';
-import HeaderScrollEffect from '@/components/HeaderScrollEffect';
-import { BACKEND_DOMAIN } from '@/api/config';
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import ScrollToTop from "@/components/ScrollToTop";
+import HeaderScrollEffect from "@/components/HeaderScrollEffect";
+import { BACKEND_DOMAIN } from "@/api/config";
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 interface NewsArticle {
   id?: string;
@@ -32,58 +36,105 @@ interface NewsData {
   pagination: Pagination;
 }
 
-// Revalidate every 60 seconds for news listings
-export const revalidate = 60;
-
-async function getNewsData(page: number, limit: number, search?: string): Promise<NewsData | null> {
+/* --------------------------------------------------------------- */
+/*  Helper fetch – dùng trong client → cache: 'no-store'           */
+/* --------------------------------------------------------------- */
+async function getNewsData(
+  page: number,
+  limit: number,
+  search?: string
+): Promise<NewsData | null> {
   try {
     let url = `${BACKEND_DOMAIN}/api/home/news/all?page=${page}&limit=${limit}`;
-    if (search) {
-      url += `&search=${encodeURIComponent(search)}`;
-    }
-    console.log('📡 Fetching news from:', url);
-    const res = await fetch(url, { 
-      next: { revalidate: 60 } 
-    });
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+    const res = await fetch(url, { cache: "no-store" });
     const data = await res.json();
-    console.log('📰 News data received:', data.data?.pagination);
-    if (data.success) return data.data;
-    return null;
-  } catch (error) {
-    console.error('❌ Error fetching news:', error);
+    return data.success ? data.data : null;
+  } catch (e) {
+    console.error(e);
     return null;
   }
 }
 
-export default async function NewsPage({ searchParams }: { searchParams: Promise<{ page?: string, limit?: string, search?: string }> }) {
-  const params = await searchParams;
-  const page = parseInt(params.page || '1');
-  const limit = parseInt(params.limit || '9');
-  const search = params.search || '';
-  const newsData = await getNewsData(page, limit, search);
+/* --------------------------------------------------------------- */
+/*  Component – Client                                             */
+/* --------------------------------------------------------------- */
+export default function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; limit?: string; search?: string }>;
+}) {
+  const { t } = useTranslation("news");
+  const [newsData, setNewsData] = useState<NewsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  if (!newsData || !newsData.news || newsData.news.length === 0) {
+  /* ------------------------------------------------------------- */
+  /*  Load data khi searchParams thay đổi                         */
+  /* ------------------------------------------------------------- */
+  useEffect(() => {
+    const load = async () => {
+      const params = await searchParams;
+      const page = parseInt(params.page ?? "1");
+      const limit = parseInt(params.limit ?? "9");
+      const search = params.search ?? "";
+      setSearchTerm(search);
+      const data = await getNewsData(page, limit, search);
+      setNewsData(data);
+      setLoading(false);
+    };
+    load();
+  }, [searchParams]);
+
+  /* ------------------------------------------------------------- */
+  /*  Loading                                                     */
+  /* ------------------------------------------------------------- */
+  if (loading) {
+    return (
+      <>
+        <HeaderScrollEffect />
+        <Header />
+        <main className="news-page">
+          <div className="container py-5 text-center">
+            <i className="fas fa-spinner fa-spin fa-3x"></i>
+          </div>
+        </main>
+        <Footer />
+        <ScrollToTop />
+      </>
+    );
+  }
+
+  /* ------------------------------------------------------------- */
+  /*  No data                                                     */
+  /* ------------------------------------------------------------- */
+  if (!newsData || !newsData.news?.length) {
     return (
       <>
         <HeaderScrollEffect />
         <Header />
         <main className="news-page">
           <div className="container py-5">
-            <h1 className="news-page-title text-center mb-5">News</h1>
-            {search ? (
+            <h1 className="news-page-title text-center mb-5">{t("title")}</h1>
+            {searchTerm ? (
               <div className="text-center py-5">
                 <i className="fas fa-search fa-3x mb-3 text-muted"></i>
-                <h3>Không tìm thấy kết quả</h3>
-                <p>Không có tin tức nào khớp với từ khóa <strong>"{search}"</strong></p>
+                <h3>{t("no_results_title")}</h3>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: t("no_results_text", { search: `"${searchTerm}"` }),
+                  }}
+                />
                 <Link href="/news" className="btn btn-outline-primary mt-3">
-                  <i className="fas fa-arrow-left me-2"></i>Xem tất cả tin tức
+                  <i className="fas fa-arrow-left me-2"></i>
+                  {t("view_all")}
                 </Link>
               </div>
             ) : (
               <div className="text-center py-5">
                 <i className="fas fa-newspaper fa-3x mb-3 text-muted"></i>
-                <h3>No news articles found</h3>
-                <p>Check back later for updates and announcements.</p>
+                <h3>{t("empty_title")}</h3>
+                <p>{t("empty_text")}</p>
               </div>
             )}
           </div>
@@ -94,138 +145,130 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
     );
   }
 
+  const { currentPage: page, limit } = newsData.pagination;
+
   return (
     <>
-      {/* Header Scroll Effect */}
       <HeaderScrollEffect />
-      {/* Header */}
       <Header />
-      {/* News Content */}
       <main className="news-page">
         <div className="container py-5">
-          {/* Page Title */}
-          <h1 className="news-page-title text-center mb-4">News</h1>
-          
-          {/* Search Results Info */}
-          {search && (
+          <h1 className="news-page-title text-center mb-4">{t("title")}</h1>
+
+          {/* Search info */}
+          {searchTerm && (
             <div className="search-results-info mb-4 text-center">
-              <p className="mb-2">
-                Tìm thấy <strong>{newsData.pagination.totalItems}</strong> kết quả cho từ khóa: <strong>"{search}"</strong>
-              </p>
+              <p
+                className="mb-2"
+                dangerouslySetInnerHTML={{
+                  __html: t("search_results", {
+                    count: newsData.pagination.totalItems,
+                    term: `"${searchTerm}"`,
+                  }),
+                }}
+              />
               <Link href="/news" className="btn btn-sm btn-outline-secondary">
-                <i className="fas fa-times me-2"></i>Xóa tìm kiếm
+                <i className="fas fa-times me-2"></i>
+                {t("clear_search")}
               </Link>
             </div>
           )}
-          
-          {/* News Grid */}
+
+          {/* Grid */}
           <div className="row g-4">
-            {newsData.news.map((article: NewsArticle) => {
-              // Format date
+            {newsData.news.map((article) => {
               const publishDate = new Date(article.publishDate);
-              const formattedDate = new Intl.DateTimeFormat('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
+              const formattedDate = new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
               }).format(publishDate);
+
+              const imgSrc = (() => {
+                const img = (article as any).mainImage || article.image;
+                if (!img?.trim())
+                  return "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop";
+                return img.startsWith("http")
+                  ? img
+                  : img.startsWith("/")
+                  ? `${BACKEND_DOMAIN}${img}`
+                  : `${BACKEND_DOMAIN}/${img}`;
+              })();
+
               return (
                 <div key={article.id || article._id} className="col-md-6 col-lg-4">
                   <div className="card news-card h-100">
-                    {/* Featured Tag */}
                     {article.isFeatured && (
                       <div className="featured-tag">
-                        <span>Featured</span>
+                        <span>{t("featured")}</span>
                       </div>
                     )}
-                    {/* Card Image */}
                     <div className="card-img-top position-relative">
                       <Image
-                        src={(() => {
-                          // Ưu tiên mainImage trước, fallback sang image
-                          const imgPath = (article as any).mainImage || article.image;
-                          
-                          if (!imgPath || !imgPath.trim()) {
-                            return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop';
-                          }
-                          
-                          if (imgPath.startsWith('http')) {
-                            return imgPath;
-                          }
-                          
-                          if (imgPath.startsWith('/')) {
-                            return `${BACKEND_DOMAIN}${imgPath}`;
-                          }
-                          
-                          return `${BACKEND_DOMAIN}/${imgPath}`;
-                        })()}
+                        src={imgSrc}
                         alt={article.title}
                         width={400}
                         height={250}
                         className="img-fluid"
-                        style={{ objectFit: 'cover', height: '200px', width: '100%' }}
+                        style={{ objectFit: "cover", height: "200px", width: "100%" }}
                         unoptimized
                       />
-                      <div className="news-date-badge">
-                        {formattedDate}
-                      </div>
+                      <div className="news-date-badge">{formattedDate}</div>
                     </div>
-                    {/* Card Body */}
+
                     <div className="card-body d-flex flex-column">
                       <h3 className="card-title news-card-title">
-                        <Link href={`/news/${article.slug}`} className="text-decoration-none news-card-title-link">
+                        <Link
+                          href={`/news/${article.slug}`}
+                          className="text-decoration-none news-card-title-link"
+                        >
                           {article.title}
                         </Link>
                       </h3>
-                      <p className="card-text flex-grow-1">
-                        {article.excerpt}
-                      </p>
-                      {/* Tags */}
-                      {article.tags && Array.isArray(article.tags) && article.tags.length > 0 && (
-                        <div className="news-tags mb-3" style={{ display: 'flex', flexWrap: 'wrap' }}>
-                          {article.tags.slice(0, 3).map((tag: string, index: number) => (
+                      <p className="card-text flex-grow-1">{article.excerpt}</p>
+
+                      {article.tags?.length ? (
+                        <div className="news-tags mb-3 d-flex flex-wrap">
+                          {article.tags.slice(0, 3).map((tag, i) => (
                             <span
-                              key={`${tag}-${index}`}
-                              className="news-tag"
-                              style={{ 
-                                background: '#e6f3ff', 
-                                padding: '4px 12px', 
-                                borderRadius: '16px',
-                                fontSize: '0.75rem',
-                                color: '#0d6efd',
-                                marginRight: '8px',
-                                marginBottom: '8px',
+                              key={`${tag}-${i}`}
+                              className="news-tag me-2 mb-2"
+                              style={{
+                                background: "#e6f3ff",
+                                padding: "4px 12px",
+                                borderRadius: "16px",
+                                fontSize: "0.75rem",
+                                color: "#0d6efd",
                                 fontWeight: 500,
-                                display: 'inline-flex',
-                                alignItems: 'center'
                               }}
                             >
                               {tag}
                             </span>
                           ))}
                           {article.tags.length > 3 && (
-                            <span 
+                            <span
                               className="news-tag-more"
                               style={{
-                                background: '#f0f0f0',
-                                padding: '4px 8px',
-                                borderRadius: '16px',
-                                fontSize: '0.75rem',
-                                color: '#666',
-                                fontWeight: 500
+                                background: "#f0f0f0",
+                                padding: "4px 8px",
+                                borderRadius: "16px",
+                                fontSize: "0.75rem",
+                                color: "#666",
+                                fontWeight: 500,
                               }}
                             >
                               +{article.tags.length - 3}
                             </span>
                           )}
                         </div>
-                      )}
-                      {/* Read More Link */}
-                      <Link 
-                        href={`/news/${article.slug}`} 
+                      ) : null}
+
+                      <Link
+                        href={`/news/${article.slug}`}
                         className="btn btn-outline-primary mt-auto news-read-more-btn"
                         style={{ fontWeight: 500 }}
                       >
-                        Read More
+                        {t("read_more")}
                       </Link>
                     </div>
                   </div>
@@ -233,44 +276,52 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
               );
             })}
           </div>
+
           {/* Pagination */}
-          {newsData.pagination && newsData.pagination.totalPages > 1 && (
+          {newsData.pagination.totalPages > 1 && (
             <nav aria-label="News pagination" className="mt-5">
               <ul className="pagination justify-content-center">
-                {/* Previous Page */}
-                <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
-                  <Link 
-                    className="page-link" 
-                    href={`/news?page=${page - 1}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
-                    aria-label="Previous"
+                <li className={`page-item ${page <= 1 ? "disabled" : ""}`}>
+                  <Link
+                    className="page-link"
+                    href={`/news?page=${page - 1}&limit=${limit}${
+                      searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""
+                    }`}
                   >
-                    <span aria-hidden="true">&laquo;</span>
+                    Previous
                   </Link>
                 </li>
-                {/* Page Numbers */}
+
                 {Array.from({ length: newsData.pagination.totalPages }, (_, i) => i + 1).map(
-                  (pageNum) => (
-                    <li 
-                      key={pageNum} 
-                      className={`page-item ${pageNum === page ? 'active' : ''}`}
+                  (p) => (
+                    <li
+                      key={p}
+                      className={`page-item ${p === page ? "active" : ""}`}
                     >
-                      <Link 
-                        className="page-link" 
-                        href={`/news?page=${pageNum}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
+                      <Link
+                        className="page-link"
+                        href={`/news?page=${p}&limit=${limit}${
+                          searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""
+                        }`}
                       >
-                        {pageNum}
+                        {p}
                       </Link>
                     </li>
                   )
                 )}
-                {/* Next Page */}
-                <li className={`page-item ${page >= newsData.pagination.totalPages ? 'disabled' : ''}`}>
-                  <Link 
-                    className="page-link" 
-                    href={`/news?page=${page + 1}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
-                    aria-label="Next"
+
+                <li
+                  className={`page-item ${
+                    page >= newsData.pagination.totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    href={`/news?page=${page + 1}&limit=${limit}${
+                      searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""
+                    }`}
                   >
-                    <span aria-hidden="true">&raquo;</span>
+                    Next
                   </Link>
                 </li>
               </ul>
@@ -278,10 +329,8 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
           )}
         </div>
       </main>
-      {/* Footer */}
       <Footer />
-      {/* Scroll to Top Button */}
       <ScrollToTop />
     </>
   );
-} 
+}
