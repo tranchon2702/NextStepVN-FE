@@ -67,6 +67,13 @@ const ContactIcon = () => (
   </svg>
 );
 
+const CandidatesIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const OverviewIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="18" y1="20" x2="18" y2="10" />
@@ -108,12 +115,14 @@ const menuGroups = [
     title: "Content Management",
     items: [
       { href: '/admin/facilities', label: 'Facilities', icon: <FacilitiesIcon /> },
+      { href: '/admin/programs', label: 'Programs', icon: <OverviewIcon /> },
     ]
   },
   {
     title: "Interaction",
     items: [
       { href: '/admin/recruitment', label: 'Recruitment', icon: <RecruitmentIcon /> },
+      { href: '/admin/candidates', label: 'Candidates', icon: <CandidatesIcon /> },
       { href: '/admin/contact', label: 'Contact', icon: <ContactIcon /> },
       { href: '/admin/overview', label: 'Overview', icon: <OverviewIcon /> },
     ]

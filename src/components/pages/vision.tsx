@@ -224,33 +224,48 @@ export default function Vision() {
             <div className="vertical-timeline">
               <div className="vt-line" />
 
-              <div className="vt-item">
-                <div className="vt-dot">
+              <div className="vt-item" data-phase="1">
+                <div className="vt-dot phase-1">
+                  <div className="vt-dot-inner">
+                    <i className="fas fa-rocket"></i>
+                  </div>
                   <span className="vt-year">2025-2027</span>
                 </div>
                 <div className="vt-body">
+                  <div className="vt-phase-label">Giai Đoạn 1</div>
                   <h4 className="vt-title">{t('timeline_1_title')}</h4>
                   <p className="vt-text">{t('timeline_1_text')}</p>
+                  <div className="vt-decoration"></div>
                 </div>
               </div>
 
-              <div className="vt-item">
-                <div className="vt-dot accent">
+              <div className="vt-item" data-phase="2">
+                <div className="vt-dot phase-2">
+                  <div className="vt-dot-inner">
+                    <i className="fas fa-chart-line"></i>
+                  </div>
                   <span className="vt-year">2028-2030</span>
                 </div>
                 <div className="vt-body">
+                  <div className="vt-phase-label">Giai Đoạn 2</div>
                   <h4 className="vt-title">{t('timeline_2_title')}</h4>
                   <p className="vt-text">{t('timeline_2_text')}</p>
+                  <div className="vt-decoration"></div>
                 </div>
               </div>
 
-              <div className="vt-item">
-                <div className="vt-dot">
+              <div className="vt-item" data-phase="3">
+                <div className="vt-dot phase-3">
+                  <div className="vt-dot-inner">
+                    <i className="fas fa-globe-asia"></i>
+                  </div>
                   <span className="vt-year">2031-2035</span>
                 </div>
                 <div className="vt-body">
+                  <div className="vt-phase-label">Giai Đoạn 3</div>
                   <h4 className="vt-title">{t('timeline_3_title')}</h4>
                   <p className="vt-text">{t('timeline_3_text')}</p>
+                  <div className="vt-decoration"></div>
                 </div>
               </div>
 
@@ -543,93 +558,332 @@ export default function Vision() {
 
         .vertical-timeline {
           position: relative;
-          max-width: 900px;
+          max-width: 1000px;
           margin: 0 auto;
-          padding: 20px 0 10px 0;
+          padding: 40px 0;
         }
 
         .vt-line {
           position: absolute;
-          left: 40px;
-          top: 10px;
-          bottom: 10px;
-          width: 4px;
-          background: linear-gradient(180deg, rgba(220,38,38,0.95), rgba(153,27,27,0.95));
-          border-radius: 8px;
-          transform-origin: center;
-          box-shadow: 0 6px 18px rgba(220,38,38,0.12);
+          left: 80px;
+          top: 40px;
+          bottom: 40px;
+          width: 6px;
+          background: linear-gradient(180deg, 
+            rgba(220,38,38,0.2) 0%, 
+            rgba(220,38,38,0.8) 25%, 
+            rgba(220,38,38,1) 50%,
+            rgba(153,27,27,1) 75%,
+            rgba(153,27,27,0.6) 100%
+          );
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(220,38,38,0.3), inset 0 0 10px rgba(255,255,255,0.2);
         }
 
         .vt-item {
           position: relative;
-          padding: 18px 20px 18px 100px;
+          padding: 0 0 60px 200px;
           display: flex;
-          gap: 18px;
+          gap: 30px;
           align-items: flex-start;
+          opacity: 0;
+          transform: translateX(-30px);
+          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .vt-item:nth-child(2) { transition-delay: 0.1s; }
+        .vt-item:nth-child(3) { transition-delay: 0.2s; }
+        .vt-item:nth-child(4) { transition-delay: 0.3s; }
+
+        .timeline-section.animate-in .vt-item {
+          opacity: 1;
+          transform: translateX(0);
         }
 
         .vt-dot {
           position: absolute;
-          left: 8px;
-          top: 18px;
-          width: 64px;
-          height: 64px;
-          background: white;
+          left: 0;
+          top: 10px;
+          width: 160px;
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .vt-dot-inner {
+          width: 90px;
+          height: 90px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-          border: 4px solid rgba(220,38,38,0.95);
-          color: #dc2626;
-          font-weight: 700;
+          font-size: 2.2rem;
+          position: relative;
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        .vt-dot.accent {
-          background: linear-gradient(135deg,#dc2626,#991b1b);
+        .vt-dot.phase-1 .vt-dot-inner {
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
           color: white;
-          border-color: rgba(0,0,0,0.06);
+        }
+
+        .vt-dot.phase-2 .vt-dot-inner {
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          color: white;
+        }
+
+        .vt-dot.phase-3 .vt-dot-inner {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          color: white;
+        }
+
+        .vt-dot-inner::before {
+          content: '';
+          position: absolute;
+          inset: -8px;
+          border-radius: 50%;
+          padding: 8px;
+          background: inherit;
+          opacity: 0.2;
+          z-index: -1;
+          animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 0.2; }
+          50% { transform: scale(1.15); opacity: 0.4; }
         }
 
         .vt-year {
-          font-size: 0.9rem;
+          font-size: 0.85rem;
+          font-weight: 700;
           text-align: center;
           display: block;
-          padding: 4px 6px;
+          padding: 6px 16px;
+          background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+          color: white;
+          border-radius: 20px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          white-space: nowrap;
         }
 
         .vt-body {
           background: white;
-          padding: 18px 22px;
-          border-radius: 12px;
-          box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+          padding: 32px;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.08);
           flex: 1;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          border: 2px solid transparent;
+        }
+
+        .vt-body::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 5px;
+          background: linear-gradient(90deg, 
+            transparent 0%, 
+            currentColor 50%, 
+            transparent 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .vt-item[data-phase="1"] .vt-body::before { color: #3b82f6; }
+        .vt-item[data-phase="2"] .vt-body::before { color: #dc2626; }
+        .vt-item[data-phase="3"] .vt-body::before { color: #059669; }
+
+        .vt-body:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+          border-color: currentColor;
+        }
+
+        .vt-item[data-phase="1"] .vt-body:hover { border-color: #3b82f6; }
+        .vt-item[data-phase="2"] .vt-body:hover { border-color: #dc2626; }
+        .vt-item[data-phase="3"] .vt-body:hover { border-color: #059669; }
+
+        .vt-body:hover::before {
+          opacity: 1;
+        }
+
+        .vt-phase-label {
+          display: inline-block;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          padding: 6px 14px;
+          border-radius: 20px;
+          margin-bottom: 12px;
+        }
+
+        .vt-item[data-phase="1"] .vt-phase-label {
+          background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(29,78,216,0.15) 100%);
+          color: #1d4ed8;
+        }
+
+        .vt-item[data-phase="2"] .vt-phase-label {
+          background: linear-gradient(135deg, rgba(220,38,38,0.15) 0%, rgba(153,27,27,0.15) 100%);
+          color: #991b1b;
+        }
+
+        .vt-item[data-phase="3"] .vt-phase-label {
+          background: linear-gradient(135deg, rgba(5,150,105,0.15) 0%, rgba(4,120,87,0.15) 100%);
+          color: #047857;
         }
 
         .vt-title {
-          margin: 0 0 8px 0;
-          font-size: 1.15rem;
+          margin: 0 0 16px 0;
+          font-size: 1.5rem;
           color: #1a202c;
-          font-weight: 600;
+          font-weight: 700;
+          line-height: 1.3;
         }
 
         .vt-text {
           margin: 0;
-          color: #556172;
-          line-height: 1.6;
+          color: #4a5568;
+          line-height: 1.8;
+          font-size: 1.05rem;
         }
 
-        /* small animation for items */
-        .vt-item { opacity: 0; transform: translateX(-12px); transition: all 0.5s ease; }
-        .timeline-section.animate-in .vt-item { opacity: 1; transform: translateX(0); }
+        .vt-decoration {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 100px;
+          height: 100px;
+          opacity: 0.05;
+          pointer-events: none;
+        }
 
-        @media (max-width: 768px) {
-          .vertical-timeline { padding-left: 0; }
-          .vt-line { left: 18px; }
-          .vt-item { padding-left: 72px; }
-          .vt-dot { left: -2px; width: 52px; height: 52px; }
-          .vt-body { padding: 14px 16px; }
-          .vt-title { font-size: 1rem; }
+        .vt-item[data-phase="1"] .vt-decoration {
+          background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+        }
+
+        .vt-item[data-phase="2"] .vt-decoration {
+          background: radial-gradient(circle, #dc2626 0%, transparent 70%);
+        }
+
+        .vt-item[data-phase="3"] .vt-decoration {
+          background: radial-gradient(circle, #059669 0%, transparent 70%);
+        }
+
+        .vt-item:hover .vt-dot-inner {
+          transform: scale(1.1) rotate(5deg);
+          box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        @media (max-width: 992px) {
+          .vertical-timeline { 
+            padding: 20px 0;
+            max-width: 100%;
+          }
+          
+          .vt-line { 
+            left: 45px;
+            width: 4px;
+          }
+          
+          .vt-item { 
+            padding: 0 0 50px 130px;
+            gap: 20px;
+          }
+          
+          .vt-dot {
+            left: 0;
+            width: 90px;
+          }
+          
+          .vt-dot-inner {
+            width: 70px;
+            height: 70px;
+            font-size: 1.8rem;
+          }
+          
+          .vt-year {
+            font-size: 0.75rem;
+            padding: 5px 12px;
+          }
+          
+          .vt-body {
+            padding: 24px;
+          }
+          
+          .vt-title {
+            font-size: 1.25rem;
+          }
+          
+          .vt-text {
+            font-size: 0.95rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .vt-item { 
+            padding: 0 0 40px 100px;
+          }
+          
+          .vt-line {
+            left: 32px;
+            width: 3px;
+          }
+          
+          .vt-dot {
+            left: -5px;
+            width: 75px;
+          }
+          
+          .vt-dot-inner {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+          }
+          
+          .vt-dot-inner::before {
+            inset: -6px;
+          }
+          
+          .vt-year {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+          }
+          
+          .vt-body {
+            padding: 20px;
+            border-radius: 16px;
+          }
+          
+          .vt-phase-label {
+            font-size: 0.65rem;
+            padding: 5px 12px;
+            letter-spacing: 1px;
+          }
+          
+          .vt-title {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+          }
+          
+          .vt-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+          }
+          
+          .vt-decoration {
+            width: 70px;
+            height: 70px;
+          }
         }
 
         /* CTA */

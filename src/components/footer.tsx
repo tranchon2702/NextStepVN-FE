@@ -54,7 +54,7 @@ export default function Footer() {
                     height={70}
                   />
                   <p className="footer-slogan">
-                    NEXT STEP VIET NAM<br />
+                    NEXT STEP<br />
                     <span className="slogan-sub">{t('slogan')}</span>
                   </p>
                   <p className="footer-commitment">{t('commitment')}</p>

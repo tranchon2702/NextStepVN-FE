@@ -86,7 +86,7 @@ export default function Header() {
                   height={60}
                 />
                 <div className="brand-slogan">
-                  <span className="brand-slogan-main">NEXT STEP VIET NAM</span>
+                  <span className="brand-slogan-main">NEXT STEP</span>
                   <span className="brand-slogan-sub">{t('slogan')}</span>
                 </div>
               </div>

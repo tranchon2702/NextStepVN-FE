@@ -8,51 +8,51 @@ import Link from "next/link";
 const candidateCategories = [
   {
     id: "auto",
-    name: "Ứng viên ô tô",
+    name: "Kỹ sư Ô tô",
     icon: "fas fa-car",
-    description: "Công ty chúng tôi chuyên cung cấp kỹ sư người Việt Nam cho các doanh nghiệp Nhật Bản.",
-    details: "Đặc biệt trong lĩnh vực thiết kế cơ khí, chúng tôi có nhiều ứng viên giàu kinh nghiệm, có thể làm việc ngay. Ngoài ra, các kỹ sư của chúng tôi có khả năng giao tiếp tiếng Nhật tốt và hòa hoạt với môi trường làm việc tại công ty Nhật.",
-    requirements: "Nếu quý khách quan tâm, chúng tôi rất sẵn lòng cung cấp hồ sơ chi tiết và thông tin năng lực của ứng viên để quý khách tham khảo.",
+    description: "Thiết kế – sản xuất – QA/QC linh kiện/xe hoàn chỉnh theo tiêu chuẩn Nhật.",
+    details: "Thành thạo CAD/CAE (CATIA, NX, SolidWorks), hiểu JIS, APQP/PPAP; kinh nghiệm lắp ráp, thử nghiệm, quản lý chất lượng chuỗi cung ứng.",
+    requirements: "Ưu tiên JLPT N2–N3, sẵn sàng làm việc tại Nhật; có thể onboard trong 2–4 tuần.",
     color: "#dc2626",
     image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop"
   },
   {
     id: "mechanical",
-    name: "Ứng viên cơ khí",
+    name: "Kỹ sư Cơ khí",
     icon: "fas fa-cogs",
-    description: "Công ty chúng tôi chuyên cung cấp kỹ sư người Việt Nam cho các doanh nghiệp Nhật Bản.",
-    details: "Đặc biệt trong lĩnh vực thiết kế cơ khí, chúng tôi có nhiều ứng viên giàu kinh nghiệm, có thể làm việc ngay. Ngoài ra, các kỹ sư của chúng tôi có khả năng giao tiếp tiếng Nhật tốt và hòa hoạt với môi trường làm việc tại công ty Nhật.",
-    requirements: "Nếu quý khách quan tâm, chúng tôi rất sẵn lòng cung cấp hồ sơ chi tiết và thông tin năng lực của ứng viên để quý khách tham khảo.",
+    description: "Thiết kế máy, jig/fixture, khuôn – tự động hóa và tối ưu hóa sản xuất.",
+    details: "SolidWorks/Inventor/AutoCAD, tính bền – dung sai, BOM/BoP, FMEA; đã triển khai dự án tại nhà máy quy mô vừa & lớn.",
+    requirements: "JLPT N2 trở lên là lợi thế; kỹ năng giao tiếp nhóm, báo cáo kỹ thuật tiếng Nhật/Anh tốt.",
     color: "#991b1b",
     image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&h=600&fit=crop"
   },
   {
     id: "construction",
-    name: "Ứng viên xây dựng",
+    name: "Kỹ sư Xây dựng",
     icon: "fas fa-hard-hat",
-    description: "Công ty chúng tôi chuyên cung cấp kỹ sư người Việt Nam cho các doanh nghiệp Nhật Bản.",
-    details: "Đặc biệt trong lĩnh vực thiết kế cơ khí, chúng tôi có nhiều ứng viên giàu kinh nghiệm, có thể làm việc ngay. Ngoài ra, các kỹ sư của chúng tôi có khả năng giao tiếp tiếng Nhật tốt và hòa hoạt với môi trường làm việc tại công ty Nhật.",
-    requirements: "Nếu quý khách quan tâm, chúng tôi rất sẵn lòng cung cấp hồ sơ chi tiết và thông tin năng lực của ứng viên để quý khách tham khảo.",
+    description: "Thiết kế – giám sát – quản lý tiến độ & chất lượng công trình dân dụng/nhà xưởng.",
+    details: "AutoCAD/Revit, kiểm soát khối lượng, hồ sơ nghiệm thu, an toàn lao động; kinh nghiệm phối hợp MEP và nhà thầu phụ.",
+    requirements: "Ưu tiên có chứng chỉ hành nghề; JLPT N3+, sẵn sàng công tác/đi công trường dài ngày.",
     color: "#dc2626",
     image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&h=600&fit=crop"
   },
   {
     id: "electrical",
-    name: "Ứng viên điện, điện tử",
+    name: "Kỹ sư Điện – Điện tử",
     icon: "fas fa-bolt",
-    description: "Công ty chúng tôi chuyên cung cấp kỹ sư người Việt Nam cho các doanh nghiệp Nhật Bản.",
-    details: "Đặc biệt trong lĩnh vực thiết kế cơ khí, chúng tôi có nhiều ứng viên giàu kinh nghiệm, có thể làm việc ngay. Ngoài ra, các kỹ sư của chúng tôi có khả năng giao tiếp tiếng Nhật tốt và hòa hoạt với môi trường làm việc tại công ty Nhật.",
-    requirements: "Nếu quý khách quan tâm, chúng tôi rất sẵn lòng cung cấp hồ sơ chi tiết và thông tin năng lực của ứng viên để quý khách tham khảo.",
+    description: "Thiết kế mạch – tủ điện – PLC/SCADA – nhúng/IoT cho công nghiệp.",
+    details: "PLC (Mitsubishi/Omron/Siemens), HMI, P&ID, EMC/ESD; thiết kế PCB, vi điều khiển (STM32/ESP), chuẩn hóa an toàn điện.",
+    requirements: "JLPT N2–N3; ưu tiên có chứng chỉ an toàn điện, kinh nghiệm commissioning tại nhà máy Nhật.",
     color: "#991b1b",
     image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=600&fit=crop"
   },
   {
     id: "it",
-    name: "Ứng viên IT",
+    name: "Kỹ sư IT",
     icon: "fas fa-laptop-code",
-    description: "Công ty chúng tôi chuyên cung cấp kỹ sư người Việt Nam cho các doanh nghiệp Nhật Bản.",
-    details: "Đặc biệt trong lĩnh vực thiết kế cơ khí, chúng tôi có nhiều ứng viên giàu kinh nghiệm, có thể làm việc ngay. Ngoài ra, các kỹ sư của chúng tôi có khả năng giao tiếp tiếng Nhật tốt và hòa hoạt với môi trường làm việc tại công ty Nhật.",
-    requirements: "Nếu quý khách quan tâm, chúng tôi rất sẵn lòng cung cấp hồ sơ chi tiết và thông tin năng lực của ứng viên để quý khách tham khảo.",
+    description: "Phát triển Web/Mobile, hệ thống doanh nghiệp và giải pháp Cloud/AI.",
+    details: "Java/.NET/Node.js, React/Vue, SQL/NoSQL; CI/CD, Docker/K8s, AWS/Azure/GCP; quy trình Agile/Scrum, code review chuẩn.",
+    requirements: "JLPT N2+ cho onsite; tiếng Nhật giao tiếp dự án; có kinh nghiệm offshore/BrSE là lợi thế mạnh.",
     color: "#dc2626",
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop"
   }
@@ -164,9 +164,11 @@ export default function ForRecruiters() {
                     </div>
 
                     <div className="card-actions">
-                      <Link href={`/candidates/${category.id}`} className="btn-contact">
-                        <i className="fas fa-users"></i>
-                        Xem Danh Sách Ứng Viên
+                      <Link href={`/candidates/${category.id}`} className="btn-contact-link">
+                        <span className="btn-contact-inner">
+                          <i className="fas fa-users"></i>
+                          <span>Xem Ứng Viên</span>
+                        </span>
                       </Link>
                       <a href="/contact" className="btn-info">
                         <i className="fas fa-envelope"></i>
@@ -268,6 +270,21 @@ export default function ForRecruiters() {
       </section>
 
       {/* Styles */}
+      <style jsx global>{`
+        /* Remove all underlines from buttons */
+        a.btn-contact-link,
+        a.btn-contact-link:hover,
+        a.btn-contact-link:focus,
+        a.btn-contact-link:active,
+        a.btn-contact-link:visited {
+          text-decoration: none !important;
+          border-bottom: none !important;
+        }
+
+        a.btn-contact-link * {
+          text-decoration: none !important;
+        }
+      `}</style>
       <style jsx>{`
         /* Hero Section */
         .recruiters-hero {
@@ -464,46 +481,153 @@ export default function ForRecruiters() {
 
         .card-actions {
           display: flex;
-          gap: 15px;
-          flex-wrap: wrap;
+          flex-direction: column;
+          gap: 12px;
         }
 
-        .btn-contact,
+        .btn-contact-link,
         .btn-info {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 12px 25px;
-          border-radius: 8px;
-          font-weight: 600;
-          text-decoration: none;
-          transition: all 0.2s ease;
+          display: block;
+          text-decoration: none !important;
+          transition: all 0.3s ease;
+          width: 100%;
         }
 
-        .btn-contact {
+        .btn-contact-link,
+        .btn-contact-link:hover,
+        .btn-contact-link:focus,
+        .btn-contact-link:active,
+        .btn-contact-link:visited {
+          text-decoration: none !important;
+          color: inherit;
+        }
+
+        .btn-contact-link *,
+        .btn-contact-link *:hover,
+        .btn-contact-link *:focus,
+        .btn-contact-link *:active {
+          text-decoration: none !important;
+        }
+
+        .btn-contact-inner {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 16px 20px;
           background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
           color: white;
-          flex: 1;
-          justify-content: center;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          letter-spacing: 0.3px;
+          text-transform: uppercase;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4), 
+                      0 1px 3px rgba(220, 38, 38, 0.2),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+          cursor: pointer;
+          width: 100%;
+          height: 100%;
         }
 
-        .btn-contact:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
-          color: white;
+        .btn-contact-inner::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.3), 
+            transparent
+          );
+          transition: left 0.5s ease;
+        }
+
+        .btn-contact-inner::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 12px;
+          padding: 2px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0.5;
+          pointer-events: none;
+        }
+
+        .btn-contact-link:hover .btn-contact-inner {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 40px rgba(220, 38, 38, 0.6), 
+                      0 5px 10px rgba(220, 38, 38, 0.3),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+          letter-spacing: 0.8px;
+        }
+
+        .btn-contact-link:hover .btn-contact-inner::before {
+          left: 100%;
+        }
+
+        .btn-contact-link:active .btn-contact-inner {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-contact-inner i {
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .btn-contact-link:hover .btn-contact-inner i {
+          transform: translateX(3px);
+          filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
         }
 
         .btn-info {
+          padding: 16px 20px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          justify-content: center;
           background: white;
           color: #dc2626;
           border: 2px solid #dc2626;
-          flex: 1;
-          justify-content: center;
+          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.15);
+          transition: all 0.3s ease;
+          cursor: pointer;
         }
 
         .btn-info:hover {
           background: #dc2626;
           color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-info:active {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+        }
+
+        .btn-info i {
+          font-size: 1.1rem;
+          transition: transform 0.3s ease;
+        }
+
+        .btn-info:hover i {
+          transform: scale(1.1);
         }
 
         /* Why Choose Section */
@@ -681,7 +805,7 @@ export default function ForRecruiters() {
             flex-direction: column;
           }
 
-          .btn-contact,
+          .btn-contact-link,
           .btn-info {
             width: 100%;
           }

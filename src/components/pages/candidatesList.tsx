@@ -1,7 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import CVViewerModal from "@/components/CVViewerModal";
 
 interface Candidate {
   id: number;
@@ -11,6 +12,7 @@ interface Candidate {
   age: number;
   status: string;
   details: string;
+  cvUrl?: string;
 }
 
 // Mock data
@@ -22,7 +24,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N3",
     age: 25,
     status: "ĐỘC THÂN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 2,
@@ -31,7 +34,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N2",
     age: 27,
     status: "ĐÃ KẾT HÔN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 3,
@@ -40,7 +44,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N3",
     age: 24,
     status: "ĐỘC THÂN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 4,
@@ -49,7 +54,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N2",
     age: 26,
     status: "ĐỘC THÂN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 5,
@@ -58,7 +64,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N3",
     age: 23,
     status: "ĐỘC THÂN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 6,
@@ -67,7 +74,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N4",
     age: 28,
     status: "ĐÃ KẾT HÔN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 7,
@@ -76,7 +84,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N2",
     age: 29,
     status: "ĐÃ KẾT HÔN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   },
   {
     id: 8,
@@ -85,7 +94,8 @@ const mockCandidates: Candidate[] = [
     jlpt: "N1",
     age: 30,
     status: "ĐỘC THÂN",
-    details: "Xem chi tiết"
+    details: "Xem chi tiết",
+    cvUrl: "/sample-cv.pdf"
   }
 ];
 
@@ -104,28 +114,63 @@ export default function CandidatesList() {
 
   const [filters, setFilters] = useState({
     maritalStatus: "",
-    major: categoryName !== "TẤT CẢ" ? categoryName : "",
-    jlpt: "",
-    age: ""
+    major: "",
+    jlpt: ""
   });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [loading, setLoading] = useState(true);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [totalCandidates, setTotalCandidates] = useState(0);
+  const [showCVModal, setShowCVModal] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
 
-  // Filter candidates
-  const filteredCandidates = mockCandidates.filter(candidate => {
-    if (filters.maritalStatus && candidate.status !== filters.maritalStatus) return false;
-    if (filters.major && candidate.major !== filters.major) return false;
-    if (filters.jlpt && candidate.jlpt !== filters.jlpt) return false;
-    if (filters.age && candidate.age.toString() !== filters.age) return false;
-    return true;
-  });
+  // Fetch candidates from API
+  useEffect(() => {
+    fetchCandidates();
+  }, [currentPage, filters]);
+
+  const fetchCandidates = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+        ...(filters.maritalStatus && { maritalStatus: filters.maritalStatus }),
+        ...(filters.major && { major: filters.major }),
+        ...(filters.jlpt && { jlpt: filters.jlpt })
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/candidates?${queryParams}`);
+      const data = await response.json();
+
+      if (data.success) {
+        // Convert backend data to match frontend interface
+        const formattedCandidates = data.data.map((c: any) => ({
+          id: c._id,
+          name: c.name,
+          major: c.major,
+          jlpt: c.jlpt,
+          age: c.age || 0,
+          status: c.maritalStatus,
+          details: "Xem chi tiết",
+          cvUrl: c.cvUrl ? `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}${c.cvUrl}` : undefined
+        }));
+
+        setCandidates(formattedCandidates);
+        setTotalCandidates(data.pagination.total);
+      }
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Pagination
-  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentCandidates = filteredCandidates.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(totalCandidates / itemsPerPage);
+  const currentCandidates = candidates;
 
   const handleFilterChange = (field: string, value: string) => {
     setFilters(prev => ({ ...prev, [field]: value }));
@@ -139,22 +184,41 @@ export default function CandidatesList() {
   const handleReset = () => {
     setFilters({
       maritalStatus: "",
-      major: categoryName !== "TẤT CẢ" ? categoryName : "",
-      jlpt: "",
-      age: ""
+      major: "",
+      jlpt: ""
     });
     setCurrentPage(1);
   };
 
+  const handleViewCV = (candidate: Candidate) => {
+    if (candidate.cvUrl) {
+      setSelectedCandidate(candidate);
+      setShowCVModal(true);
+    } else {
+      alert('CV không khả dụng');
+    }
+  };
+
   return (
     <>
+      {/* CV Viewer Modal */}
+      {showCVModal && selectedCandidate && selectedCandidate.cvUrl && (
+        <CVViewerModal
+          isOpen={showCVModal}
+          onClose={() => setShowCVModal(false)}
+          cvUrl={selectedCandidate.cvUrl}
+          candidateId={selectedCandidate.id.toString()}
+          candidateName={selectedCandidate.name}
+        />
+      )}
+
       <section className="candidates-section">
         <div className="container-fluid">
           {/* Page Header */}
           <div className="page-header">
             <h1 className="page-title">Tìm Ứng Viên - {categoryName}</h1>
             <p className="page-subtitle">
-              Tìm thấy {filteredCandidates.length} ứng viên phù hợp
+              {loading ? "Đang tải..." : `Tìm thấy ${totalCandidates} ứng viên phù hợp`}
             </p>
           </div>
 
@@ -214,17 +278,6 @@ export default function CandidatesList() {
                   </select>
                 </div>
 
-                <div className="col-lg-2 col-md-6">
-                  <label className="filter-label">Độ tuổi</label>
-                  <input
-                    type="number"
-                    className="filter-input"
-                    placeholder="Tuổi"
-                    value={filters.age}
-                    onChange={(e) => handleFilterChange('age', e.target.value)}
-                  />
-                </div>
-
                 <div className="col-lg-3 col-md-12">
                   <label className="filter-label">&nbsp;</label>
                   <div className="filter-actions">
@@ -252,13 +305,18 @@ export default function CandidatesList() {
                     <th className="text-center">Email</th>
                     <th className="text-center">Ngành nghề</th>
                     <th className="text-center">JLPT</th>
-                    <th className="text-center">Tuổi</th>
                     <th className="text-center">Tình trạng hôn nhân</th>
                     <th className="text-center">Chi tiết</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {currentCandidates.length > 0 ? (
+                  {loading ? (
+                    <tr>
+                      <td colSpan={6} className="no-data">
+                        Đang tải dữ liệu...
+                      </td>
+                    </tr>
+                  ) : currentCandidates.length > 0 ? (
                     currentCandidates.map((candidate, index) => (
                       <tr key={candidate.id}>
                         <td className="text-left">
@@ -274,14 +332,17 @@ export default function CandidatesList() {
                         <td className="text-center">
                           <span className="jlpt-badge">{candidate.jlpt}</span>
                         </td>
-                        <td className="text-center">{candidate.age}</td>
                         <td className="text-center">
                           <span className={`status-badge ${candidate.status === 'ĐỘC THÂN' ? 'confirmed' : candidate.status === 'ĐÃ KẾT HÔN' ? 'paid' : 'pending'}`}>
                             {candidate.status}
                           </span>
                         </td>
                         <td className="text-center">
-                          <button className="btn-view-detail">
+                          <button 
+                            className="btn-view-detail"
+                            onClick={() => handleViewCV(candidate)}
+                            title="Xem CV & Liên hệ"
+                          >
                             <i className="fas fa-eye"></i>
                           </button>
                         </td>
@@ -289,7 +350,7 @@ export default function CandidatesList() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="no-data">
+                      <td colSpan={6} className="no-data">
                         Không tìm thấy ứng viên phù hợp
                       </td>
                     </tr>

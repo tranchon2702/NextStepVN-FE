@@ -82,7 +82,7 @@ export default function AdminRecruitmentPage() {
     const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
     const [contactHR, setContactHR] = useState<ContactHR | null>(null);
     const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'jobs' | 'applications' | 'company' | 'hr'>('jobs');
+  const [activeTab, setActiveTab] = useState<'jobs' | 'applications'>('jobs');
   // Modal state
   const [showJobModal, setShowJobModal] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
@@ -266,18 +266,6 @@ export default function AdminRecruitmentPage() {
         >
           <FiUsers /> Ứng viên ({applications.length})
         </button>
-        <button 
-          className={activeTab === 'company' ? 'active' : ''} 
-          onClick={() => setActiveTab('company')}
-        >
-          <FiHome /> Thông tin công ty
-        </button>
-        <button 
-          className={activeTab === 'hr' ? 'active' : ''} 
-          onClick={() => setActiveTab('hr')}
-        >
-          <FiUsers /> Liên hệ HR
-        </button>
             </div>
 
       {/* Jobs Tab */}
@@ -425,132 +413,6 @@ export default function AdminRecruitmentPage() {
                             </tbody>
                         </table>
                     </div>
-        </div>
-      )}
-
-      {/* Company Info Tab */}
-      {activeTab === 'company' && companyInfo && (
-        <div className="admin-content">
-          <h2>Thông tin công ty</h2>
-          
-          {/* Company Description */}
-          <div className="admin-section-card">
-            <h3>Mô tả công ty</h3>
-            <div className="admin-form">
-              <div className="form-group">
-                <label>Mô tả</label>
-                <textarea 
-                  value={companyInfo.description.join('\n')} 
-                  onChange={(e) => setCompanyInfo({
-                    ...companyInfo, 
-                    description: e.target.value.split('\n').filter(line => line.trim())
-                  })}
-                  rows={4}
-                  placeholder="Nhập mô tả công ty (mỗi dòng một đoạn)"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Company Stats Management */}
-          <div className="admin-section-card">
-            <h3>Quản lý thống kê công ty</h3>
-            <div className="stats-grid">
-              {Object.entries(companyInfo.stats || {}).map(([key, stat]) => (
-                <div key={key} className="stat-card">
-                  <div className="stat-card-header">
-                    <h5>Thống kê: {key}</h5>
-                  </div>
-                  <div className="form-group">
-                    <label>Label</label>
-                    <input
-                      type="text"
-                      value={stat.label || ''}
-                      onChange={(e) => setCompanyInfo({
-                        ...companyInfo,
-                        stats: {
-                          ...companyInfo.stats,
-                          [key]: {
-                            ...stat,
-                            label: e.target.value
-                          }
-                        }
-                      })}
-                      placeholder="Nhập nhãn hiển thị"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Số liệu</label>
-                    <input
-                      type="text"
-                      value={stat.number || ''}
-                      onChange={(e) => setCompanyInfo({
-                        ...companyInfo,
-                        stats: {
-                          ...companyInfo.stats,
-                          [key]: {
-                            ...stat,
-                            number: e.target.value
-                          }
-                        }
-                      })}
-                      placeholder="Nhập số liệu (vd: 1000+, 20+)"
-                    />
-                  </div>
-                  <div className="stat-preview">
-                    <div className="stat-number">{stat.number}</div>
-                    <div className="stat-label">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button onClick={handleSaveCompanyInfo} className="admin-btn primary save-btn">
-            Lưu tất cả thay đổi
-          </button>
-        </div>
-      )}
-
-      {/* HR Contact Tab */}
-      {activeTab === 'hr' && contactHR && (
-        <div className="admin-content">
-          <h2>Thông tin liên hệ HR</h2>
-          <div className="admin-form">
-            <div className="form-group">
-              <label>Tiêu đề</label>
-              <input 
-                type="text" 
-                value={contactHR.title} 
-                onChange={(e) => setContactHR({...contactHR, title: e.target.value})}
-              />
-            </div>
-            <div className="form-group">
-              <label>Mô tả</label>
-              <textarea 
-                value={contactHR.description} 
-                onChange={(e) => setContactHR({...contactHR, description: e.target.value})}
-                rows={3}
-              />
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input 
-                type="email" 
-                value={contactHR.email} 
-                onChange={(e) => setContactHR({...contactHR, email: e.target.value})}
-              />
-            </div>
-            <div className="form-group">
-              <label>Số điện thoại</label>
-              <input 
-                type="text" 
-                value={contactHR.phone} 
-                onChange={(e) => setContactHR({...contactHR, phone: e.target.value})}
-              />
-            </div>
-            <button onClick={handleSaveContactHR} className="admin-btn primary">Lưu thay đổi</button>
-          </div>
         </div>
       )}
 
