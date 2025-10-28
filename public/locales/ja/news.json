@@ -1,0 +1,12 @@
+{
+  "title": "ニュース",
+  "no_results_title": "結果が見つかりません",
+  "no_results_text": "キーワード {{search}} に一致するニュースはありません",
+  "view_all": "すべてのニュースを見る",
+  "empty_title": "記事がありません",
+  "empty_text": "最新情報は後ほどご確認ください。",
+  "search_results": "<strong>{{count}}</strong> 件の結果をキーワード <strong>{{term}}</strong> で見つかりました",
+  "clear_search": "検索をクリア",
+  "featured": "特集",
+  "read_more": "続きを読む"
+}

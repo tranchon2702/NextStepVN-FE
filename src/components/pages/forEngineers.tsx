@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const BACKEND_DOMAIN = process.env.NEXT_PUBLIC_BACKEND_DOMAIN || 'http://localhost:5001';
 
@@ -162,14 +163,15 @@ const mockJobs: { [key: string]: any[] } = {
 };
 
 export default function ForEngineers() {
+  const { t } = useTranslation('engineers');
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
-  
+
   // Set initial category based on URL param or default to first
-  const initialCategory = categoryParam && jobCategories.some(cat => cat.id === categoryParam) 
-    ? categoryParam 
+  const initialCategory = categoryParam && jobCategories.some(cat => cat.id === categoryParam)
+    ? categoryParam
     : "CƠ KHÍ";
-  
+
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [jobs, setJobs] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -190,11 +192,11 @@ export default function ForEngineers() {
         setLoading(true);
         const response = await fetch(`${BACKEND_DOMAIN}/api/careers/jobs?includeInactive=false`);
         const result = await response.json();
-        
+
         // Handle both response formats
         const jobsData = result.data || result;
         setAllJobs(jobsData);
-        
+
         // Set initial jobs for first category
         const categoryJobs = jobsData.filter((job: any) => job.category === "CƠ KHÍ");
         setJobs(categoryJobs);
@@ -250,7 +252,7 @@ export default function ForEngineers() {
     const posted = new Date(createdAt);
     const diffTime = Math.abs(now.getTime() - posted.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Hôm nay';
     if (diffDays === 1) return 'Hôm qua';
     if (diffDays < 7) return `${diffDays} ngày trước`;
@@ -265,7 +267,7 @@ export default function ForEngineers() {
         <div className="hero-overlay"></div>
         <Image
           src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1920&h=1080&fit=crop"
-          alt="Dành cho kỹ sư tìm việc"
+          alt={t('hero_alt')}
           fill
           priority
           className="hero-bg"
@@ -274,9 +276,9 @@ export default function ForEngineers() {
         />
         <div className="container">
           <div className="hero-content">
-            <h1 className="hero-title">Dành Cho Kỹ Sư Tìm Việc</h1>
+            <h1 className="hero-title">{t('hero_title')}</h1>
             <div className="hero-divider"></div>
-            <p className="hero-subtitle">Khám phá cơ hội việc làm tại Nhật Bản</p>
+            <p className="hero-subtitle">{t('hero_subtitle')}</p>
           </div>
         </div>
       </section>
@@ -285,16 +287,16 @@ export default function ForEngineers() {
       <section className="engineers-content">
         <div className="container-fluid">
           <div className="content-wrapper">
-            
+
             {/* Left Sidebar - Categories */}
             <aside className="categories-sidebar">
               <div className="sidebar-header">
                 <h3 className="sidebar-title">
                   <i className="fas fa-th-large"></i>
-                  Ngành Nghề
+                  {t('sidebar_title')}
                 </h3>
               </div>
-              
+
               <div className="categories-list">
                 {jobCategories.map((category) => (
                   <div
@@ -331,18 +333,22 @@ export default function ForEngineers() {
                   <h2 className="jobs-title">
                     {jobCategories.find(c => c.id === selectedCategory)?.name}
                   </h2>
-                  <p className="jobs-subtitle">
-                    Có <strong>{jobs.length}</strong> vị trí đang tuyển dụng
-                  </p>
+                  <p
+                    className="jobs-subtitle"
+                    dangerouslySetInnerHTML={{
+                      __html: t('jobs_count', { count: jobs.length }),
+                    }}
+                  />
+
                 </div>
                 <div className="jobs-actions">
                   <button className="btn-filter">
                     <i className="fas fa-filter"></i>
-                    Lọc
+                    {t('filter')}
                   </button>
                   <button className="btn-sort">
                     <i className="fas fa-sort"></i>
-                    Sắp xếp
+                    {t('sort')}
                   </button>
                 </div>
               </div>
@@ -351,7 +357,7 @@ export default function ForEngineers() {
                 {loading ? (
                   <div className="loading-state">
                     <i className="fas fa-spinner fa-spin"></i>
-                    <p>Đang tải việc làm...</p>
+                    <p>{t('loading_jobs')}</p>
                   </div>
                 ) : jobs.length > 0 ? (
                   jobs.map((job) => (
@@ -395,7 +401,7 @@ export default function ForEngineers() {
                         <p className="job-card-description">{job.description}</p>
                         <div className="job-card-footer">
                           <Link href={`/jobs/${job._id}`} className="btn-detail">
-                            Xem Chi Tiết
+                            {t('view_detail')}
                             <i className="fas fa-arrow-right"></i>
                           </Link>
                         </div>
@@ -405,8 +411,8 @@ export default function ForEngineers() {
                 ) : (
                   <div className="no-jobs">
                     <i className="fas fa-briefcase"></i>
-                    <h3>Chưa có việc làm</h3>
-                    <p>Hiện tại chưa có vị trí tuyển dụng nào trong ngành này.</p>
+                    <h3>{t('no_jobs_title')}</h3>
+                    <p>{t('no_jobs_desc')}</p>
                   </div>
                 )}
               </div>
@@ -419,21 +425,21 @@ export default function ForEngineers() {
       {/* CTA Section */}
       <section className="cta-section">
         <div className="container">
-          <div 
+          <div
             className="cta-wrapper"
             ref={(el) => { if (el) sectionsRef.current[2] = el; }}
           >
             <div className="cta-card">
               <div className="row align-items-center">
                 <div className="col-lg-8 mb-4 mb-lg-0">
-                  <h3 className="cta-title">Không Tìm Thấy Công Việc Phù Hợp?</h3>
+                  <h3 className="cta-title">{t('no_jobs_title')}</h3>
                   <p className="cta-text">
-                    Gửi CV của bạn cho chúng tôi. NEXT STEP sẽ kết nối bạn với các cơ hội việc làm phù hợp nhất!
+                    {t('no_jobs_desc')}
                   </p>
                 </div>
                 <div className="col-lg-4 text-lg-end">
                   <a href="/contact" className="btn-cta">
-                    Gửi CV Ngay
+                    {t('send_cv')}
                     <i className="fas fa-paper-plane"></i>
                   </a>
                 </div>
