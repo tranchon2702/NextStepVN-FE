@@ -1,0 +1,12 @@
+{
+  "title": "Tin tức",
+  "no_results_title": "Không tìm thấy kết quả",
+  "no_results_text": "Không có tin tức nào khớp với từ khóa {{search}}",
+  "view_all": "Xem tất cả tin tức",
+  "empty_title": "Chưa có bài viết",
+  "empty_text": "Hãy quay lại sau để cập nhật thông tin mới.",
+  "search_results": "Tìm thấy <strong>{{count}}</strong> kết quả cho từ khóa: <strong>{{term}}</strong>",
+  "clear_search": "Xóa tìm kiếm",
+  "featured": "Nổi bật",
+  "read_more": "Đọc thêm"
+}

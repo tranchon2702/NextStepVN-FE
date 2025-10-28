@@ -8,6 +8,7 @@ import { BACKEND_DOMAIN } from "../../api/config";
 import ClientOnly from "../ClientOnly";
 import { getOptimizedImageUrls } from "../../shared/imageUtils";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 // Type definitions
 interface HeroData {
@@ -212,6 +213,7 @@ function ResponsiveImg({ srcs, alt, className, width, height, sizes, style }: Re
 }
 
 export default function Home({ homeData }: HomeProps) {
+  const { t } = useTranslation('home');
   useClientScript();
   
   // Biến điều khiển hiển thị các sections
@@ -272,7 +274,7 @@ export default function Home({ homeData }: HomeProps) {
   if (loading) {
     return (
       <div className="alert alert-info m-3" role="alert">
-        Đang tải dữ liệu trang chủ...
+        {t('loading')}
       </div>
     );
   }
@@ -290,7 +292,7 @@ export default function Home({ homeData }: HomeProps) {
   if (!data) {
     return (
       <div className="alert alert-warning m-3" role="alert">
-        Không có dữ liệu trang chủ
+        {t('no_data')}
       </div>
     );
   }
@@ -506,7 +508,7 @@ export default function Home({ homeData }: HomeProps) {
             <div className="video-container">
               <ResponsiveImg
                 srcs={getOptimizedImageUrls("/images/home_banner-section2.jpg")}
-                alt="Hero Banner"
+                alt={t('hero_banner')}
                 className="img-fluid w-100"
                 width={1920}
                 height={1080}
@@ -514,7 +516,7 @@ export default function Home({ homeData }: HomeProps) {
               <div className="overlay"></div>
             </div>
             <div className="text-overlay">
-              <h1>WELCOME TO NEXT STEP</h1>
+              <h1>{t('welcome')}</h1>
             </div>
           </div>
         )}
@@ -530,7 +532,7 @@ export default function Home({ homeData }: HomeProps) {
           <div className="strengths-cta-wrapper">
             <a href="/overview" className="strengths-cta-button">
               <span className="cta-icon">⚡</span>
-              <span className="cta-text">THẾ MẠNH CỦA NEXT STEP</span>
+              <span className="cta-text">{t('strengths_cta')}</span>
               <span className="cta-arrow">→</span>
             </a>
           </div>
@@ -541,8 +543,8 @@ export default function Home({ homeData }: HomeProps) {
       <section className="recruitment-categories-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">THÔNG TIN TUYỂN DỤNG</h2>
-            <p className="section-subtitle">Cơ hội nghề nghiệp dành cho bạn</p>
+            <h2 className="section-title">{t('recruitment_title')}</h2>
+            <p className="section-subtitle">{t('recruitment_subtitle')}</p>
           </div>
           
           <div className="categories-grid">
@@ -551,16 +553,16 @@ export default function Home({ homeData }: HomeProps) {
               <div className="category-image-wrapper">
                 <img 
                   src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80" 
-                  alt="Kỹ sư Cơ khí"
+                  alt={t('mechanical_engineer')}
                   className="category-image"
                 />
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">CƠ KHÍ</h3>
-                <p className="category-description">Thiết kế, phát triển và bảo trì hệ thống cơ khí</p>
+                <h3 className="category-title">{t('mechanical')}</h3>
+                <p className="category-description">{t('mechanical_desc')}</p>
                 <a href="/for-engineers?category=CƠ KHÍ" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
+                  {t('view_details')} <span className="arrow">→</span>
                 </a>
               </div>
             </div>
@@ -570,16 +572,16 @@ export default function Home({ homeData }: HomeProps) {
               <div className="category-image-wrapper">
                 <img 
                   src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80" 
-                  alt="Kỹ sư Ô tô"
+                  alt={t('automotive_engineer')} 
                   className="category-image"
                 />
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">Ô TÔ</h3>
-                <p className="category-description">Chuyên về công nghệ và hệ thống ô tô hiện đại</p>
+                <h3 className="category-title">{t('automotive')}</h3>
+                <p className="category-description">{t('automotive_desc')}</p>
                 <a href="/for-engineers?category=Ô TÔ" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
+                  {t('view_details')} <span className="arrow">→</span>
                 </a>
               </div>
             </div>
@@ -595,10 +597,10 @@ export default function Home({ homeData }: HomeProps) {
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">ĐIỆN, ĐIỆN TỬ</h3>
-                <p className="category-description">Thiết kế và vận hành hệ thống điện công nghiệp</p>
+                <h3 className="category-title">{t('electrical')}</h3>
+                <p className="category-description">{t('electrical_desc')}</p>
                 <a href="/for-engineers?category=ĐIỆN, ĐIỆN TỬ" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
+                  {t('view_details')} <span className="arrow">→</span>
                 </a>
               </div>
             </div>
@@ -608,16 +610,16 @@ export default function Home({ homeData }: HomeProps) {
               <div className="category-image-wrapper">
                 <img 
                   src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80" 
-                  alt="Kỹ sư IT"
+                  alt={t('it_engineer')}
                   className="category-image"
                 />
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">IT</h3>
-                <p className="category-description">Phát triển phần mềm và giải pháp công nghệ</p>
+                <h3 className="category-title">{t('it')}</h3>
+                <p className="category-description">{t('it_desc')}</p>
                 <a href="/for-engineers?category=IT" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
+                  {t('view_details')} <span className="arrow">→</span>
                 </a>
               </div>
             </div>
@@ -627,16 +629,16 @@ export default function Home({ homeData }: HomeProps) {
               <div className="category-image-wrapper">
                 <img 
                   src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80" 
-                  alt="Kỹ sư Xây dựng"
+                  alt={t('construction_engineer')}
                   className="category-image"
                 />
                 <div className="category-overlay"></div>
               </div>
               <div className="category-content">
-                <h3 className="category-title">XÂY DỰNG</h3>
-                <p className="category-description">Thiết kế và quản lý các dự án xây dựng công nghiệp</p>
+                <h3 className="category-title">{t('construction')}</h3>
+                <p className="category-description">{t('construction_desc')}</p>
                 <a href="/for-engineers?category=XÂY DỰNG" className="category-link">
-                  Xem chi tiết <span className="arrow">→</span>
+                  {t('view_details')} <span className="arrow">→</span>
                 </a>
               </div>
             </div>
@@ -1144,7 +1146,7 @@ export default function Home({ homeData }: HomeProps) {
       {/* News Section */}
       <section className="news py-5">
         <div className="container">
-          <h2 className="section-title text-center">NEWS</h2>
+          <h2 className="section-title text-center">{t('news_title')}</h2>
           <div className="row mt-4 news-flex-row" style={{ display: 'flex', alignItems: 'stretch' }}>
             {/* Featured News - Hiển thị tin đầu tiên */}
             {featuredNews && featuredNews.length > 0 && (
@@ -1178,7 +1180,7 @@ export default function Home({ homeData }: HomeProps) {
                           {featuredNews[0].excerpt}
                         </p>
                         <span className="btn btn-primary">
-                          READ MORE
+                          {t('read_more')}
                         </span>
                       </div>
                     </Link>
@@ -1236,14 +1238,10 @@ export default function Home({ homeData }: HomeProps) {
                           </div>
                           <div className="news-info">
                             <h6 className="news-title">
-                              SAIGON 3 JEAN ACHIEVES LEED GOLD CERTIFICATION FOR
-                              GREEN MANUFACTURING
+                              {t('fallback_news_1_title')}
                             </h6>
                             <p className="news-excerpt">
-                              Our state-of-the-art denim manufacturing facility
-                              officially receives LEED Gold certification,
-                              reinforcing our commitment to sustainable
-                              development and environmental responsibility....
+                              {t('fallback_news_1_excerpt')}
                             </p>
                             <span className="news-date">05/08/2025</span>
                           </div>
@@ -1264,13 +1262,10 @@ export default function Home({ homeData }: HomeProps) {
                           </div>
                           <div className="news-info">
                             <h6 className="news-title">
-                              LAUNCHING ECO-FRIENDLY DENIM COLLECTION FALL 2025
+                              {t('news_title_lauching')}
                             </h6>
                             <p className="news-excerpt">
-                              Our new denim collection features 100% organic
-                              cotton and non-toxic dyeing technology, delivering
-                              sustainable fashion choices for modern consumers
-                              worldwide....
+                              {t('news_excerpt_lauching')}
                             </p>
                             <span className="news-date">03/15/2025</span>
                           </div>
@@ -1291,15 +1286,10 @@ export default function Home({ homeData }: HomeProps) {
                           </div>
                           <div className="news-info">
                             <h6 className="news-title">
-                              SG3 JEAN WINS &quot;BEST SUSTAINABLE FACTORY&quot;
-                              AWARD 2025
+                              {t('news_title_4')}
                             </h6>
                             <p className="news-excerpt">
-                              SG3 Jean has been honored with the &quot;Best
-                              Sustainable Factory&quot; award for 2025,
-                              recognizing our leadership in eco-friendly
-                              manufacturing and innovation in the denim
-                              industry....
+                              {t('news_excerpt_4')}
                             </p>
                             <span className="news-date">03/15/2025</span>
                           </div>
@@ -1314,7 +1304,7 @@ export default function Home({ homeData }: HomeProps) {
           <div className="row mt-2">
             <div className="col-12 text-center">
               <Link href="/news" className="btn btn-outline-primary btn-lg px-4">
-                View all news
+                {t('view_all_news')}
               </Link>
             </div>
           </div>
@@ -1354,8 +1344,8 @@ export default function Home({ homeData }: HomeProps) {
       <section className="testimonials-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">KHÁCH HÀNG NÓI GÌ VỀ CHÚNG TÔI</h2>
-            <p className="section-subtitle">Những phản hồi tích cực từ khách hàng đã tin tưởng chúng tôi</p>
+            <h2 className="section-title">{t('testimonials_title')}</h2>
+            <p className="section-subtitle">{t('testimonials_subtitle')}</p>
           </div>
 
           <div className="testimonials-wrapper">
@@ -1399,7 +1389,7 @@ export default function Home({ homeData }: HomeProps) {
                     <i className="fas fa-star"></i>
                   </div>
                   <p className="testimonial-text">
-                    Chương trình học rất hợp lý và bài bản. Các giảng viên nhiệt tình, tận tâm. Sau khi hoàn thành khóa học, tôi đã tìm được việc làm phù hợp tại Nhật Bản.
+                    {t('testimonial_1')}
                   </p>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -1407,7 +1397,7 @@ export default function Home({ homeData }: HomeProps) {
                     </div>
                     <div className="author-info">
                       <h4 className="author-name">Nguyễn Thị Lan</h4>
-                      <p className="author-position">Kỹ sư Cơ khí</p>
+                      <p className="author-position">{t('mechanical_engineer')}</p>
                     </div>
                   </div>
                 </div>
@@ -1427,7 +1417,7 @@ export default function Home({ homeData }: HomeProps) {
                     <i className="fas fa-star"></i>
                   </div>
                   <p className="testimonial-text">
-                    Mình đã được khách hàng vô tư khách hàng đã tìm được nhân tài phù hợp cho dự án của công ty. Dịch vụ chuyên nghiệp, hỗ trợ tận tình từ đầu đến cuối.
+                    {t('testimonial_3')}
                   </p>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -1435,7 +1425,7 @@ export default function Home({ homeData }: HomeProps) {
                     </div>
                     <div className="author-info">
                       <h4 className="author-name">Lê Thị Hương</h4>
-                      <p className="author-position">HR Manager</p>
+                      <p className="author-position">{t('it_engineer')}</p>
                     </div>
                   </div>
                 </div>
@@ -1455,7 +1445,7 @@ export default function Home({ homeData }: HomeProps) {
                     <i className="fas fa-star"></i>
                   </div>
                   <p className="testimonial-text">
-                    Chương trình đào tạo kỹ sư đi Nhật chi phí 0 đồng rất tốt. Tôi đã được học nhiều kỹ năng mới và có cơ hội làm việc tại môi trường quốc tế.
+                    {t('testimonial_3')}
                   </p>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -1463,7 +1453,7 @@ export default function Home({ homeData }: HomeProps) {
                     </div>
                     <div className="author-info">
                       <h4 className="author-name">Trần Văn Nam</h4>
-                      <p className="author-position">Kỹ sư IT</p>
+                      <p className="author-position">{t('it_engineer')}</p>
                     </div>
                   </div>
                 </div>
@@ -1483,7 +1473,7 @@ export default function Home({ homeData }: HomeProps) {
                     <i className="fas fa-star"></i>
                   </div>
                   <p className="testimonial-text">
-                    Dịch vụ tuyển dụng rất chuyên nghiệp. Chúng tôi đã tìm được nhiều ứng viên chất lượng cao cho các vị trí kỹ sư tại công ty.
+                    {t('testimonial_4')}
                   </p>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -1491,7 +1481,7 @@ export default function Home({ homeData }: HomeProps) {
                     </div>
                     <div className="author-info">
                       <h4 className="author-name">Phạm Minh Tuấn</h4>
-                      <p className="author-position">CEO - Tech Company</p>
+                      <p className="author-position">{t('ceo_tech_company')}</p>
                     </div>
                   </div>
                 </div>

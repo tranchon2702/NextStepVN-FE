@@ -1,0 +1,15 @@
+{
+  "hero_alt": "Dành cho kỹ sư tìm việc",
+  "hero_title": "Dành Cho Kỹ Sư Tìm Việc",
+  "hero_subtitle": "Khám phá cơ hội việc làm tại Nhật Bản",
+  "sidebar_title": "Ngành Nghề",
+  "jobs_count": "Có <strong>{{count}}</strong> vị trí đang tuyển dụng",
+  "filter": "Lọc",
+  "sort": "Sắp xếp",
+  "loading_jobs": "Đang tải việc làm...",
+  "full_time": "Full-time",
+  "view_detail": "Xem Chi Tiết",
+  "no_jobs_title": "Chưa có việc làm",
+  "no_jobs_desc": "Hiện tại chưa có vị trí tuyển dụng nào trong ngành này.",
+  "send_cv": "Gửi CV Ngay"
+}

@@ -1,0 +1,15 @@
+{
+  "hero_alt": "仕事を探すエンジニア向け",
+  "hero_title": "仕事を探すエンジニア向け",
+  "hero_subtitle": "日本での就職機会を探す",
+  "sidebar_title": "職種",
+  "jobs_count": "<strong>{{count}}</strong>件の募集があります",
+  "filter": "フィルター",
+  "sort": "並べ替え",
+  "loading_jobs": "求人を読み込んでいます...",
+  "full_time": "フルタイム",
+  "view_detail": "詳細を見る",
+  "no_jobs_title": "求人がありません",
+  "no_jobs_desc": "現在、この業界には募集はありません。",
+  "send_cv": "今すぐ履歴書を送る"
+}
