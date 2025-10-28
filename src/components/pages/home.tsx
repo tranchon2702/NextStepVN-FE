@@ -18,12 +18,6 @@ interface HeroData {
   isActive: boolean;
   aiBannerImage?: string;
   aiBannerTitle?: string;
-  buttonLink?: string;
-  ctaType?: 'program' | 'url' | 'none';
-  ctaLabel?: string;
-  ctaSlug?: string;
-  ctaUrl?: string;
-  ctaTheme?: 'red' | 'dark' | 'light';
 }
 
 interface SectionData {
@@ -468,35 +462,17 @@ export default function Home({ homeData }: HomeProps) {
                     <h1>{heroItem.subtitle}</h1>
                   </div>
                 )}
-                {/* Button ở góc phải dưới theo CTA */}
-                {(heroItem?.ctaType !== 'none') && (
-                  (() => {
-                    const label = heroItem.ctaLabel || heroItem.title;
-                    let href = '#';
-                    let isExternal = false;
-                    if (heroItem.ctaType === 'program' && heroItem.ctaSlug) {
-                      href = `/chuong-trinh/${heroItem.ctaSlug}`;
-                    } else if (heroItem.ctaType === 'url' && heroItem.ctaUrl) {
-                      href = heroItem.ctaUrl;
-                      isExternal = href.startsWith('http');
-                    } else if (heroItem.buttonLink) {
-                      href = heroItem.buttonLink;
-                      isExternal = href.startsWith('http');
-                    } else {
-                      return null;
-                    }
-                    return (
-                      <a 
-                        href={href}
-                        className="hero-cta-button"
-                        target={isExternal ? '_blank' : '_self'}
-                        rel={isExternal ? 'noopener noreferrer' : undefined}
-                      >
-                        {label}
-                        <span className="arrow">→</span>
-                      </a>
-                    );
-                  })()
+                {/* Button ở góc phải dưới - hiển thị title */}
+                {heroItem?.title && (
+                  <a 
+                    href={heroItem.buttonLink || '/dao-tao-ky-su-nhat-ban'} 
+                    className="hero-cta-button"
+                    target={heroItem.buttonLink?.startsWith('http') ? '_blank' : '_self'}
+                    rel={heroItem.buttonLink?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  >
+                    {heroItem.title}
+                    <span className="arrow">→</span>
+                  </a>
                 )}
               </div>
             ))}

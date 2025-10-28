@@ -115,7 +115,6 @@ const menuGroups = [
     title: "Content Management",
     items: [
       { href: '/admin/facilities', label: 'Facilities', icon: <FacilitiesIcon /> },
-      { href: '/admin/programs', label: 'Programs', icon: <OverviewIcon /> },
     ]
   },
   {

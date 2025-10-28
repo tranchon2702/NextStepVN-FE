@@ -4,7 +4,6 @@ import { useState, useEffect, ChangeEvent, useRef } from "react";
 import Image from "next/image";
 import RichTextEditor from "@/components/news/RichTextEditor";
 import homeService from "@/services/homeService";
-import programsAdminService from "@/services/programsService-admin";
 import { BACKEND_DOMAIN } from "@/api/config";
 import { FiSave, FiImage, FiVideo, FiLink, FiType, FiFileText, FiTrash2, FiPlusCircle, FiCheck, FiAlertTriangle, FiInfo, FiEdit, FiArrowRight, FiX, FiCalendar, FiEye } from 'react-icons/fi';
 import { toast, ToastOptions } from "react-toastify";
@@ -35,11 +34,6 @@ interface HeroData {
   aiBannerTitle?: string;
   order: number;
   buttonLink?: string; // Link khi click button
-  ctaType?: 'program' | 'url' | 'none';
-  ctaLabel?: string;
-  ctaSlug?: string;
-  ctaUrl?: string;
-  ctaTheme?: 'red' | 'dark' | 'light';
 }
 interface SectionData {
   title: string;
@@ -508,17 +502,9 @@ export default function AdminHomePage() {
   // Modal news
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentEditNews, setCurrentEditNews] = useState<NewsData | null>(null);
-  const [programs, setPrograms] = useState<{ _id: string; title: string; slug: string }[]>([]);
 
   useEffect(() => {
     loadHomepageData();
-    // load programs for CTA dropdown
-    (async () => {
-      try {
-        const list = await programsAdminService.getPrograms();
-        setPrograms(list.map((p: any) => ({ _id: p._id, title: p.title, slug: p.slug })));
-      } catch (e) { /* ignore */ }
-    })();
   }, []);
 
 
@@ -1426,88 +1412,6 @@ export default function AdminHomePage() {
                         placeholder="VD: /for-engineers hoặc https://..."
                       />
                     </FormItem>
-
-                    <div className="grid-2-col">
-                      <FormItem label="CTA Type">
-                        <select
-                          className="form-input"
-                          value={hero.ctaType || 'none'}
-                          onChange={(e) => {
-                            const newHeroes = [...homeData.heroes];
-                            newHeroes[index].ctaType = e.target.value as any;
-                            setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
-                          }}
-                        >
-                          <option value="none">None</option>
-                          <option value="program">Program</option>
-                          <option value="url">External URL</option>
-                        </select>
-                      </FormItem>
-                      <FormItem label="CTA Theme">
-                        <select
-                          className="form-input"
-                          value={hero.ctaTheme || 'red'}
-                          onChange={(e) => {
-                            const newHeroes = [...homeData.heroes];
-                            newHeroes[index].ctaTheme = e.target.value as any;
-                            setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
-                          }}
-                        >
-                          <option value="red">Red</option>
-                          <option value="dark">Dark</option>
-                          <option value="light">Light</option>
-                        </select>
-                      </FormItem>
-                    </div>
-
-                    <FormItem label="CTA Label">
-                      <input
-                        type="text"
-                        className="form-input"
-                        value={hero.ctaLabel || ''}
-                        onChange={(e) => {
-                          const newHeroes = [...homeData.heroes];
-                          newHeroes[index].ctaLabel = e.target.value;
-                          setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
-                        }}
-                        placeholder="VD: Xem chi tiết chương trình"
-                      />
-                    </FormItem>
-
-                    { (hero.ctaType === 'program') && (
-                      <FormItem label="Chọn Program">
-                        <select
-                          className="form-input"
-                          value={hero.ctaSlug || ''}
-                          onChange={(e) => {
-                            const newHeroes = [...homeData.heroes];
-                            newHeroes[index].ctaSlug = e.target.value;
-                            setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
-                          }}
-                        >
-                          <option value="">-- Chọn --</option>
-                          {programs.map(p => (
-                            <option key={p._id} value={p.slug}>{p.title}</option>
-                          ))}
-                        </select>
-                      </FormItem>
-                    )}
-
-                    { (hero.ctaType === 'url') && (
-                      <FormItem label="CTA URL">
-                        <input
-                          type="text"
-                          className="form-input"
-                          value={hero.ctaUrl || ''}
-                          onChange={(e) => {
-                            const newHeroes = [...homeData.heroes];
-                            newHeroes[index].ctaUrl = e.target.value;
-                            setHomeData(prev => prev ? ({ ...prev, heroes: newHeroes }) : prev);
-                          }}
-                          placeholder="https://..."
-                        />
-                      </FormItem>
-                    )}
 
                     <FormItem label="Text giữa màn hình (Optional)" icon={<FiFileText />}>
                       <input
