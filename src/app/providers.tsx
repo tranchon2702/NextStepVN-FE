@@ -4,10 +4,17 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "@/lib/i18n";
 import { useState, useEffect, Suspense } from "react";
 import Loading from "@/components/Loading";
+import ClientOnly from "@/components/ClientOnly";
 
 function I18nErrorBoundary({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense
+      fallback={
+        <ClientOnly fallback={<div className="app-loading" />}>
+          <Loading />
+        </ClientOnly>
+      }
+    >
       {children}
     </Suspense>
   );
@@ -43,9 +50,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timeout);
   }, [isI18nReady]);
 
-  // Show loading while i18n initializes
+  // Show loading while i18n initializes (client-only to tránh hydration mismatch)
   if (!isI18nReady) {
-    return <Loading />;
+    return (
+      <ClientOnly fallback={<div className="app-loading" />}>
+        <Loading />
+      </ClientOnly>
+    );
   }
 
   // Show error state but still render children

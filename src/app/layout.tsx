@@ -9,10 +9,12 @@ import "../styles/eco-friendly-unified.css";
 import "../styles/eco-friendly-override.css";
 import "../styles/eco-friendly-responsive.css";
 import "../styles/eco-friendly-important.css";
+import "../styles/floating-chat.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 import ClientScriptProvider from "../components/ClientScriptProvider";
+import FloatingChatWidget from "../components/FloatingChatWidget";
 import Providers from "./providers";
 
 const montserrat = Montserrat({ 
@@ -123,6 +125,7 @@ export default function RootLayout({
         <ClientScriptProvider />
         {children}
         <ToastContainer position="top-right" autoClose={3000} />
+        <FloatingChatWidget />
         </Providers>
       </body>
     </html>
